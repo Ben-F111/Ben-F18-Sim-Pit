@@ -1,0 +1,13 @@
+Please print these 3 parts "Face Down" on the printer bed
+
+see attached 
+
+PRINT-BED.JPG
+
+Fill and Sand with 400/800 Paper
+
+Glue with Gel Superglue
+
+paint, Flat Black
+
+For complete parts list and Circuit Board, see Open Hornets Github
