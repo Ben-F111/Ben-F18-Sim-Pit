@@ -1,0 +1,19 @@
+Hi all
+
+By no means am I an expert on the sim, or the details contained
+
+The sim is part Open Hornets, Part self modified, Part PCB's by a 3rd party
+
+You are welcome to use the files, share them whatever. I will do my best to assist
+
+Ben
+
+Screen is a Next ion 7" Enhanced NX8048K070 (NONE HDMI)
+
+https://www.itead.cc/nextion-nx8048k070.html
+
+the code is part Arduino, Part DCS BIOS, all the outputs are not correct as there are missing gaps in DCS_Bios
+
+https://github.com/dcs-bios/dcs-bios/issues
+
+There will be updates; the team do a fantastic job
