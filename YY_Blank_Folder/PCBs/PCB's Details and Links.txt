@@ -1,0 +1,10 @@
+Big thanks to Pete for designing our PCB's the files (KiCad) can be found via the below link
+
+these PCB's were printed offshore and parts soldered on
+
+ADD LINK
+
+See parts list for required equipment
+
+
+PLEASE take note of the Open Hornet Licence when using any of the files

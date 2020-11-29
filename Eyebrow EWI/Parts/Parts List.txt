@@ -1,0 +1,46 @@
+Big thanks to Pete for designing our PCB's the files (KiCad) can be found via the below link
+
+26 x RED LEDS
+12 x ORG LEDS
+22 x GREEN LEDS
+
+I used ebay, search
+3mm Flat Top Water Clear Straw Hat LED Diodes - 
+Green 
+Orange 
+Red
+
+4 x Tactile Switches (backlit not required) but this PCB uses the backlit ones
+Like the link below, note you will need about 100 for the total SIM
+https://www.aliexpress.com/item/32760444535.html
+(google Tactile switch LED Green)
+
+Signal Diodes x 4
+330 OHM Resistor x 2
+
+8 way header x 2
+6 way header x 2
+2 way header x 4
+(above from local Jaycar)
+
+1x Left EWI Assem (3D Print - see STL Files)
+1x Left PCB
+
+1x Right EWI Assem (3D Print - see STL Files)
+1x Right PCB
+
+Acrylic Lenses, see picture and OH for size to fit
+
+2, 3, 4 mm bolts and heat inserts
+
+Search ebay or similar for 
+
+450Pcs Female Thread Knurled Nuts M2 M3 M4 Brass Threaded Insert Round
+1080PCS M2 M3 M4 Carbon-Steel Hex Bolts Nut Socket Head Cap
+
+
+
+
+
+
+
