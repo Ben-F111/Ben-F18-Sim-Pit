@@ -1,0 +1,22 @@
+
+
+
+
+
+
+
+
+
+
+To build this Simulator you will need or have access too
+
+	3D Printer (I use the Prusa MK3S, I recommend spending the money and getting the 3D printer)
+	Laser Cutter (I am lucky to have 2 friends with one)
+	CNC (Full or 1/2 Sheet) (to cut the Open Hornet MDF Cockpit)
+
+	Good temperature control Soldering Station, (I used the, Duratech 48W Temperature Controlled Soldering Station, with 0.5mm tip)
+	PCB Holder (I used, Desktop PCB Holder with Adjustable Angle, and Holder PCB with LED Magnifier and Soldering Iron Stand)
+	(Both from mu Local Jaycar)
+
+
+	**##(and at least 12 rolls of PTEG Filament)##**
