@@ -1,10 +1,13 @@
 Please print these parts "Face Down" on the printer bed
 
-I Used 0.2mm layer height, PTEG on the Prusa MK3s 20% infill
+I Used 0.2mm layer height, PTEG on the Prusa MK3s 20% infill, and
+
+I Used 0.05mm layer height (0.25 Noxel) for the finer parts, PTEG on the Prusa MK3s 20% infill
 
 see attached 
 
-PRINT-BED.JPG
+Build Plate_0.1mm.JPG
+Build Plate_0.2mm.JPG
 
 Fill any small lines with Model Putty and Sand with 400 then 800 Paper
 
@@ -13,3 +16,10 @@ Glue with Gel Superglue
 paint, Flat Black
 
 For complete parts list, instructions and any other parts, see Open Hornets Github
+
+Print the inside button parts clear and paint white with 2 coats of white paint
+
+Clear parts
+
+AMPCD_Rocker_Arr v1.stl
+AMPCD_Rocker_Cap v2.stl
