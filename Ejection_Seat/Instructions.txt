@@ -1,0 +1,23 @@
+
+
+
+//##--> NOTE THE EJ SEAT DESIGN IS ON HOLD <--##\\
+
+BUILD AT RISK
+
+
+The Ejection seat has pleanty of 3D printed Parts 40+ parts
+
+allow for 1000-1500 Ft (1 to 1 1/2 Rolls)
+
+paint, Saturn Black
+
+For complete parts list, instructions and any other parts, see Open Hornets Github
+
+Files are located on the Open Hornet Github or on the links bellow
+
+Thanks
+
+Ben
+
+GitHub\OpenHornet\release\obsolete - do not use\7_SJU-17 Ejection Seat
