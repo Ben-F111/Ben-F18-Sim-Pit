@@ -1,4 +1,4 @@
-Please print these parts "Face Down" on the printer bed
+Please print these parts "Base Down" on the printer bed
 
 I Used 0.2mm layer height, PTEG on the Prusa MK3s 20% infill
 
@@ -10,6 +10,6 @@ Fill any small lines with Model Putty and Sand with 400 then 800 Paper
 
 Glue with Gel Superglue
 
-paint, Flat Black
+paint, RAL 7073 and Black as required
 
 For complete parts list, instructions and any other parts, see Open Hornets Github
