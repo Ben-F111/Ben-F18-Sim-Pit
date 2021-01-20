@@ -1,6 +1,6 @@
 Please print these parts "Face Down" on the printer bed
 
-I Used 0.2mm layer height, PTEG on the Prusa MK3s 20% infill
+I Used 0.2mm layer height, PTEG on the Prusa MK3s 15-20% infill
 
 see attached 
 
