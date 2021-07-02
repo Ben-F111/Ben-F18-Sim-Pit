@@ -86,16 +86,16 @@ DcsBios::StringBuffer<3> ifeiFfRBuffer(0x7486, onIfeiFfRChange);
 void onIfeiOilPressLChange(char* newValue) {
     nextion.print("t7.txt=\"");
     nextion.print(newValue);
-    nextion.print("0\"");
+    nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
 }
 DcsBios::StringBuffer<3> ifeiOilPressLBuffer(0x7496, onIfeiOilPressLChange);
 
 //################## OIL RIGHT ##################Y
 void onIfeiOilPressRChange(char* newValue) {
-    nextion.print("t7.txt=\"");
+    nextion.print("t6.txt=\"");
     nextion.print(newValue);
-    nextion.print("0\"");
+    nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
 }
 DcsBios::StringBuffer<3> ifeiOilPressRBuffer(0x749a, onIfeiOilPressRChange);
@@ -400,7 +400,83 @@ NOZR = map(newValue, 0, 65535, 0, 100);
 }
 DcsBios::IntegerBuffer extNozzlePosRBuffer(0x7566, 0xffff, 0, onExtNozzlePosRChange);
 
+///////////// OIL Texture ///////////////////////
+void onIfeiOilTextureChange(char* newValue) {
+  if (strcmp(newValue, "1") == 0) {
+    nextion.print("t16.txt=\"");
+    nextion.print("OIL");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+            nextion.print("t21.txt=\"");
+    nextion.print("NOZ");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (strcmp(newValue, "0") == 0) {
+    nextion.print("t16.txt=\"");
+    nextion.print("    ");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+        nextion.print("t21.txt=\"");
+    nextion.print("    ");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+}
+DcsBios::StringBuffer<1> ifeiOilTextureBuffer(0x74c4, onIfeiOilTextureChange);
 
+///////////// RPM Texture ///////////////////////
+void onIfeiRpmTextureChange(char* newValue) {
+  if (strcmp(newValue, "1") == 0) {
+    nextion.print("t13.txt=\"");
+    nextion.print("RPM");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (strcmp(newValue, "0") == 0) {
+    nextion.print("t13.txt=\"");
+    nextion.print("      ");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+}
+DcsBios::StringBuffer<1> ifeiRpmTextureBuffer(0x74bc, onIfeiRpmTextureChange);
+
+///////////// TEMP Texture ///////////////////////
+void onIfeiTempTextureChange(char* newValue) {
+  if (strcmp(newValue, "1") == 0) {
+    nextion.print("t14.txt=\"");
+    nextion.print("TEMP");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (strcmp(newValue, "0") == 0) {
+    nextion.print("t14.txt=\"");
+    nextion.print("      ");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+}
+DcsBios::StringBuffer<1> ifeiTempTextureBuffer(0x74be, onIfeiTempTextureChange);
+
+///////////// ZULU Texture ///////////////////////
+void onIfeiZTextureChange(char* newValue) {
+  if (strcmp(newValue, "1") == 0) {
+    nextion.print("t32.txt=\"");
+    nextion.print("Z");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (strcmp(newValue, "0") == 0) {
+    nextion.print("t32.txt=\"");
+    nextion.print(" ");
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+}
+DcsBios::StringBuffer<1> ifeiZTextureBuffer(0x74dc, onIfeiZTextureChange);
+
+/////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 void setup() {
   //    Serial.begin(57600);
