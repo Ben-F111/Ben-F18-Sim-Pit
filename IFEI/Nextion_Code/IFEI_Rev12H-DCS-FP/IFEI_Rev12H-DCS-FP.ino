@@ -356,15 +356,11 @@ void onIfeiFfTextureChange(char* newValue) {
   }
 }
 
-
+////////######## <><> NOZ LEFT WORKING <><> ########\\\\\\\\
 DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74c0, onIfeiFfTextureChange);
-
-
-
 void onExtNozzlePosLChange(unsigned int newValue) {
 NOZL = map(newValue, 0, 65535, 0, 100);
    switch (NOZL) { // NOZ LEFT POSITION IFEI
-
       case 0 ... 9: nextion.print("p0.pic=0"); break;
       case 10 ... 19: nextion.print("p0.pic=1"); break;
       case 20 ... 29: nextion.print("p0.pic=2"); break;
@@ -378,50 +374,12 @@ NOZL = map(newValue, 0, 65535, 0, 100);
       case 96 ... 100: nextion.print("p0.pic=10"); break;
     }
     nextion.write("\xFF\xFF\xFF");
-/*
-NOZL = map(newValue, 0, 65535, 0, 9);
-
-
-
-
-if (NOZL == 0) {
-    nextion.print("p0.pic=0");
-    nextion.write("\xFF\xFF\xFF");}
-if (NOZL == 1) {
-    nextion.print("p0.pic=1");
-    nextion.write("\xFF\xFF\xFF");}
-if (NOZL == 2) {
-    nextion.print("p0.pic=2");
-    nextion.write("\xFF\xFF\xFF");}   
-if (NOZL == 3) {
-    nextion.print("p0.pic=3");
-    nextion.write("\xFF\xFF\xFF");} 
-if (NOZL == 4) {
-    nextion.print("p0.pic=4");
-    nextion.write("\xFF\xFF\xFF");} 
-if (NOZL == 5) {
-    nextion.print("p0.pic=5");
-    nextion.write("\xFF\xFF\xFF");} 
-if (NOZL == 6) {
-    nextion.print("p0.pic=6");
-    nextion.write("\xFF\xFF\xFF");} 
-if (NOZL == 7) {
-    nextion.print("p0.pic=7");
-    nextion.write("\xFF\xFF\xFF");} 
-if (NOZL == 8) {
-    nextion.print("p0.pic=8");
-    nextion.write("\xFF\xFF\xFF");} 
-if (NOZL == 9) {
-    nextion.print("p0.pic=9");
-    nextion.write("\xFF\xFF\xFF");}     
-
-*/
 }
 DcsBios::IntegerBuffer extNozzlePosLBuffer(0x7568, 0xffff, 0, onExtNozzlePosLChange);
 
 
 
-////////######## <><> NOZ WORKING <><> ########\\\\\\\\
+
 
 void setup() {
   //    Serial.begin(57600);
@@ -433,67 +391,6 @@ void setup() {
   DcsBios::setup();
 }
 void loop() {
-/*{ switch (atoi(NOZL)) { // NOZ LEFT POSITION IFEI
-
-      case 0 ... 9: nextion.print("p0.pic=0"); break;
-      case 10 ... 19: nextion.print("p0.pic=1"); break;
-      case 20 ... 29: nextion.print("p0.pic=2"); break;
-      case 30 ... 39: nextion.print("p0.pic=3"); break;
-      case 40 ... 49: nextion.print("p0.pic=4"); break;
-      case 50 ... 59: nextion.print("p0.pic=5"); break;
-      case 60 ... 69: nextion.print("p0.pic=6"); break;
-      case 70 ... 79: nextion.print("p0.pic=7"); break;
-      case 80 ... 89: nextion.print("p0.pic=8"); break;
-      case 90 ... 100: nextion.print("p0.pic=9"); break;
-    }
-    nextion.write("\xFF\xFF\xFF");
-  }
- /* {
-    switch (atoi(FFXL)) { // NOZ LEFT POSITION IFEI
-      case 110 ... 119: nextion.print("p0.pic=4"); break;
-      case 120 ... 129: nextion.print("p0.pic=5"); break;
-      case 130 ... 139: nextion.print("p0.pic=5"); break;
-      case 140 ... 149: nextion.print("p0.pic=5"); break;
-      case 150 ... 159: nextion.print("p0.pic=6"); break;
-      case 160 ... 169: nextion.print("p0.pic=6"); break;
-      case 170 ... 179: nextion.print("p0.pic=7"); break;
-      case 180 ... 189: nextion.print("p0.pic=7"); break;
-      case 190 ... 199: nextion.print("p0.pic=8"); break;
-      case 200 ... 209: nextion.print("p0.pic=9"); break;
-      case 210 ... 500: nextion.print("p0.pic=10"); break;
-    }
-    nextion.write("\xFF\xFF\xFF");
-  }
-{ switch (atoi(NOZR)) { // NOZ RIGHT POSITION IFEI
-      case 64 ... 67: nextion.print("p1.pic=19"); break;
-      case 68 ... 69: nextion.print("p1.pic=18"); break;
-      case 70 ... 71: nextion.print("p1.pic=16"); break;
-      case 72 ... 73: nextion.print("p1.pic=15"); break;
-      case 74 ... 75: nextion.print("p1.pic=14"); break;
-      case 76 ... 77: nextion.print("p1.pic=13"); break;
-      case 78 ... 79: nextion.print("p1.pic=12"); break;
-      case 80 ... 90: nextion.print("p1.pic=11"); break;
-      case 91 ... 99: nextion.print("p1.pic=12"); break;
-    }
-    nextion.write("\xFF\xFF\xFF");
-  }
-  {
-    switch (atoi(FFXR)) { // NOZ RIGHT POSITION IFEI
-      case 110 ... 119: nextion.print("p1.pic=15"); break;
-      case 120 ... 129: nextion.print("p1.pic=16"); break;
-      case 130 ... 139: nextion.print("p1.pic=16"); break;
-      case 140 ... 149: nextion.print("p1.pic=16"); break;
-      case 150 ... 159: nextion.print("p1.pic=17"); break;
-      case 160 ... 169: nextion.print("p1.pic=17"); break;
-      case 170 ... 179: nextion.print("p1.pic=18"); break;
-      case 180 ... 189: nextion.print("p1.pic=18"); break;
-      case 190 ... 199: nextion.print("p1.pic=19"); break;
-      case 200 ... 209: nextion.print("p1.pic=20"); break;
-      case 210 ... 500: nextion.print("p1.pic=21"); break;
-    }
-    nextion.write("\xFF\xFF\xFF");
-    */
- // }
 
   ////////########      END       #######/////////
 
