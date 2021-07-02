@@ -48,11 +48,11 @@ void setup(){
  myservo.attach(2);
 myservo.writeMicroseconds(1420);  // set servo to "Off Point"
 delay(300);
-  myservo.detach();
+myservo.detach();
 //###########################################################################################
 /// RADAR ALT WORKING ======> SET RADAR ALT STEPPER TO 0 FEET
-  stepper.setSpeed(20);
- stepper.step(720);       //Reset FULL ON Position 
+stepper.setSpeed(20);
+stepper.step(720);       //Reset FULL ON Position 
 stepper.step(-720);       //Reset FULL OFF Position
 stepper.step(10);       //Reset 0 Position
 /// RADAR ALT WORKING ======< SET RADAR ALT STEPPER TO 0 FEET

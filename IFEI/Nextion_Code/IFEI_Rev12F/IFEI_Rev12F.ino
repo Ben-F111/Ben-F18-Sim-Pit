@@ -39,20 +39,20 @@ int OCOFFBIT;
 // SEE VOID LOOP FOR NOZL POSITION
 
 void onIfeiRpmLChange(char* newValue) {
-  if (strcmp(newValue, "10") == 0) {
+//  if (strcmp(newValue, "10") == 0) {
     nextion.print("t0.txt=\"");
     nextion.print(newValue);
     nextion.print("0\"");
     nextion.write("\xFF\xFF\xFF");
-  }
-  else {
-    nextion.print("t0.txt=\"");
-    nextion.print(newValue);
+//  }
+//  else {
+ //   nextion.print("t0.txt=\"");
+//////    nextion.print(newValue);
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
   }
-  NOZL = newValue; // SETS RPM TO NOZL - USED BELOW
-}
+//  NOZL = newValue; // SETS RPM TO NOZL - USED BELOW
+//}
 DcsBios::StringBuffer<2> ifeiRpmLBuffer(0x7494, onIfeiRpmLChange);
 
 //################## RPM RIGHT ##################
@@ -61,19 +61,19 @@ DcsBios::StringBuffer<2> ifeiRpmLBuffer(0x7494, onIfeiRpmLChange);
 // SEE VOID LOOP FOR NOZR POSITION
 
 void onIfeiRpmRChange(char* newValue) {
-  if (strcmp(newValue, "10") == 0) {
+//  if (strcmp(newValue, "10") == 0) {
     nextion.print("t1.txt=\"");
     nextion.print(newValue);
     nextion.print("0\"");
     nextion.write("\xFF\xFF\xFF");
-  }
-  else {
-    nextion.print("t1.txt=\"");
-    nextion.print(newValue);
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-    NOZR = newValue; // SETS RPM TO NOZR - USED BELOW
-  }
+ // }
+ //// else {
+  //  nextion.print("t1.txt=\"");
+  //  nextion.print(newValue);
+ ////   nextion.print("\"");
+ //   nextion.write("\xFF\xFF\xFF");
+  //  NOZR = newValue; // SETS RPM TO NOZR - USED BELOW
+ // }
 }
 DcsBios::StringBuffer<2> ifeiRpmRBuffer(0x7496, onIfeiRpmRChange);
 
@@ -539,7 +539,7 @@ void onIfeiFfTextureChange(char* newValue) {
   }
 }
 DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74b2, onIfeiFfTextureChange);
-
+/*
 ///////////// OIL Texture ///////////////////////
 void onIfeiOilTextureChange(char* newValue) {
   if (strcmp(new  Value, "1") == 0) {
@@ -618,7 +618,7 @@ void onIfeiZTextureChange(char* newValue) {
 DcsBios::StringBuffer<1> ifeiZTextureBuffer(0x74cc, onIfeiZTextureChange);
 
 /////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
+*/
 ////////######## <><> NOZ WORKING <><> ########\\\\\\\\
 
 void setup() {
