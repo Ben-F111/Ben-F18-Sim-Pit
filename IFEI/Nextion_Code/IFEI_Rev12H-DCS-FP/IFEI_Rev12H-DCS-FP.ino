@@ -362,8 +362,28 @@ DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74c0, onIfeiFfTextureChange);
 
 
 void onExtNozzlePosLChange(unsigned int newValue) {
+NOZL = map(newValue, 0, 65535, 0, 100);
+   switch (NOZL) { // NOZ LEFT POSITION IFEI
 
+      case 0 ... 9: nextion.print("p0.pic=0"); break;
+      case 10 ... 19: nextion.print("p0.pic=1"); break;
+      case 20 ... 29: nextion.print("p0.pic=2"); break;
+      case 30 ... 39: nextion.print("p0.pic=3"); break;
+      case 40 ... 49: nextion.print("p0.pic=4"); break;
+      case 50 ... 59: nextion.print("p0.pic=5"); break;
+      case 60 ... 69: nextion.print("p0.pic=6"); break;
+      case 70 ... 79: nextion.print("p0.pic=7"); break;
+      case 80 ... 89: nextion.print("p0.pic=8"); break;
+      case 90 ... 95: nextion.print("p0.pic=9"); break;
+      case 96 ... 100: nextion.print("p0.pic=10"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+/*
 NOZL = map(newValue, 0, 65535, 0, 9);
+
+
+
+
 if (NOZL == 0) {
     nextion.print("p0.pic=0");
     nextion.write("\xFF\xFF\xFF");}
@@ -394,6 +414,8 @@ if (NOZL == 8) {
 if (NOZL == 9) {
     nextion.print("p0.pic=9");
     nextion.write("\xFF\xFF\xFF");}     
+
+*/
 }
 DcsBios::IntegerBuffer extNozzlePosLBuffer(0x7568, 0xffff, 0, onExtNozzlePosLChange);
 
