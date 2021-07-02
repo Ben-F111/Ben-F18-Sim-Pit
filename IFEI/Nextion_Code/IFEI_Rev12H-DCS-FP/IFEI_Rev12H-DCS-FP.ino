@@ -364,9 +364,7 @@ DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74c0, onIfeiFfTextureChange);
 void onExtNozzlePosLChange(unsigned int newValue) {
 
 NOZL = map(newValue, 0, 65535, 0, 9);
-
-
-/*if (NOZL == 0) {
+if (NOZL == 0) {
     nextion.print("p0.pic=0");
     nextion.write("\xFF\xFF\xFF");}
 if (NOZL == 1) {
