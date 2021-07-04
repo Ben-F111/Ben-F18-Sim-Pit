@@ -24,8 +24,8 @@ int OILR;
 int TMPL;
 int TMPR;
 int NOZOFF;
-//int FUELT;
-//int FUELB;
+int FLUP;
+int FLLW;
 //int BINGOBIT;
 int CODESBIT;
 int SPBIT;
@@ -115,19 +115,71 @@ DcsBios::StringBuffer<3> ifeiOilPressRBuffer(0x749a, onIfeiOilPressRChange);
 //################## FUEL LOWER ##################
 
 void onIfeiFuelDownChange(char* newValue) {
+ if (newValue[2] == 32) {
+    nextion.print("t9.txt=\"    ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[3] == 32) {
+    nextion.print("t9.txt=\"   ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[4] == 32) {
+    nextion.print("t9.txt=\"  ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[5] == 32) {
+    nextion.print("t9.txt=\" ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else {
     nextion.print("t9.txt=\"");
     nextion.print(newValue);
-    nextion.print("0\"");
+    nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
+  }
 }
 DcsBios::StringBuffer<6> ifeiFuelDownBuffer(0x748a, onIfeiFuelDownChange);
 
 //################# FUEL UPPER ##################
 void onIfeiFuelUpChange(char* newValue) {
+  if (newValue[2] == 32) {
+    nextion.print("t8.txt=\"    ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[3] == 32) {
+    nextion.print("t8.txt=\"   ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[4] == 32) {
+    nextion.print("t8.txt=\"  ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[5] == 32) {
+    nextion.print("t8.txt=\" ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else {
     nextion.print("t8.txt=\"");
     nextion.print(newValue);
-    nextion.print("0\"");
+    nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
+  }
 }
 DcsBios::StringBuffer<6> ifeiFuelUpBuffer(0x7490, onIfeiFuelUpChange);
 
@@ -237,7 +289,7 @@ DcsBios::StringBuffer<2> ifeiTimerSBuffer(0x7478, onIfeiTimerSChange);
 
 ////////########  IEFI LABELS    #######/////////
 
-// ************** BING0 ***************************
+// ************** BINGO ***************************
 void onIfeiBingoTextureChange(char* newValue) {
   if (strcmp(newValue, "1") == 0) {
     nextion.print("t19.txt=\"");
@@ -369,22 +421,6 @@ void onIfeiFfTextureChange(char* newValue) {
 }
 DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74c0, onIfeiFfTextureChange);
 
-void onIfeiRpointerTextureChange(char* newValue) {
-if (strcmp(newValue, "1") == 0){
-  NOZOFF = HIGH;
-  nextion.print("p0.pic=0");
-  nextion.write("\xFF\xFF\xFF");
-  }
-else {
-  NOZOFF = LOW; 
-  nextion.print("p0.pic=22");
-  nextion.write("\xFF\xFF\xFF");
-}
-
-//NOZOFF = newValue;
-}
-DcsBios::StringBuffer<1> ifeiRpointerTextureBuffer(0x74da, onIfeiRpointerTextureChange);
-
 ////////######## <><> NOZ LEFT WORKING <><> ########\\\\\\\\
 
 void onExtNozzlePosLChange(unsigned int newValue) {
@@ -404,10 +440,7 @@ NOZL = map(newValue, 0, 65535, 0, 100);
       case 96 ... 100: nextion.print("p0.pic=10"); break;
     }
   nextion.write("\xFF\xFF\xFF");
-  //  }
-  //  else 
-  //  nextion.print("p0.pic=22");
-  //  nextion.write("\xFF\xFF\xFF");
+
 }
 DcsBios::IntegerBuffer extNozzlePosLBuffer(0x7568, 0xffff, 0, onExtNozzlePosLChange);
 
@@ -510,6 +543,96 @@ void onIfeiZTextureChange(char* newValue) {
 }
 DcsBios::StringBuffer<1> ifeiZTextureBuffer(0x74dc, onIfeiZTextureChange);
 
+
+
+void onIfeiRpointerTextureChange(char* newValue) {
+if (strcmp(newValue, "1") == 0){
+  NOZOFF = HIGH;
+  nextion.print("p0.pic=0");
+  nextion.write("\xFF\xFF\xFF");
+  nextion.print("p1.pic=11");
+  nextion.write("\xFF\xFF\xFF");
+  }
+else {
+  NOZOFF = LOW; 
+  nextion.print("p0.pic=22");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("p1.pic=22");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t0.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t1.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t2.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t3.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t4.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t5.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t6.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF"); 
+
+  nextion.print("t7.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t7.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t10.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t11.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t30.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+
+  nextion.print("t31.txt=\"");
+  nextion.print("");
+  nextion.print("\"");
+  nextion.write("\xFF\xFF\xFF");
+  
+}
+
+}
+DcsBios::StringBuffer<1> ifeiRpointerTextureBuffer(0x74da, onIfeiRpointerTextureChange);
+
+
+
 /////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 void setup() {
@@ -529,7 +652,7 @@ void loop() {
   ////////########  SCREEN DIM    #######/////////
   delay (0);
   {
-    int brightness = analogRead(A0);
+    int brightness = analogRead(A4);
     int bright = map(brightness, 10, 1100, 2, 100);
     String dim = "dim=" + String(bright);
     brightness = bright;
