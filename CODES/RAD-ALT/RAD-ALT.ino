@@ -8,10 +8,10 @@ String readString;
 #include "DcsBios.h"
 #include <Stepper.h>
 #define  STEPS  720    // steps per revolution (limited to 315°)
-#define  COIL1  8
-#define  COIL2  9
-#define  COIL3  10
-#define  COIL4  11
+#define  COIL1  52
+#define  COIL2  51
+#define  COIL3  50
+#define  COIL4  53
 Servo myservo;  // create servo object to control a servo
 int RAD_ALT = 0;
 int val = 0;
@@ -30,9 +30,9 @@ Stepper stepper(STEPS, COIL1, COIL2, COIL3, COIL4);
 //DcsBios::RotarySyncingPotentiometer altSetPressureBuffer("RADALT_HEIGHT", A4, 0x7516, 0xffff, 0);
 //DcsBios::RotarySyncingPotentiometer radaltHeight("RADALT_HEIGHT", A4, 0x7516, 0xffff, 0);
 //###########################################################################################
-DcsBios::LED radaltGreenLamp(0x74a0, 0x0100, 19);
-DcsBios::LED lowAltWarnLt(0x749c, 0x8000, 18);
-DcsBios::Switch2Pos radaltTestSw("RADALT_TEST_SW", 0);
+//DcsBios::LED radaltGreenLamp(0x74a0, 0x0100, 19);
+//DcsBios::LED lowAltWarnLt(0x749c, 0x8000, 18);
+//DcsBios::Switch2Pos radaltTestSw("RADALT_TEST_SW", 0);
 
 //###########################################################################################
 void onRadaltAltPtrChange(unsigned int newValue) {
@@ -45,7 +45,7 @@ DcsBios::IntegerBuffer radaltAltPtrBuffer(0x751a, 0xffff, 0, onRadaltAltPtrChang
 DcsBios::ServoOutput radaltOffFlag(0x751c,2, 1000, 1420); //happy
 
 void setup(){
- myservo.attach(2);
+ myservo.attach(45);
 myservo.writeMicroseconds(1420);  // set servo to "Off Point"
 delay(300);
 myservo.detach();
