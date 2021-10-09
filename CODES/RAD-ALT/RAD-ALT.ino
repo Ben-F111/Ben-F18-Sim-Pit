@@ -27,8 +27,8 @@ Stepper stepper(STEPS, COIL1, COIL2, COIL3, COIL4);
 
 //###########################################################################################
 //TEST USING POT //OUT WHATS NOT USED
-//DcsBios::RotarySyncingPotentiometer altSetPressureBuffer("RADALT_HEIGHT", A4, 0x7516, 0xffff, 0);
-//DcsBios::RotarySyncingPotentiometer radaltHeight("RADALT_HEIGHT", A4, 0x7516, 0xffff, 0);
+//DcsBios::RotarySyncingPotentiometer altSetPressureBuffer("RADALT_HEIGHT", A4, 0x7518, 0xffff, 0);//changed 0x7518 from 0x7516
+//DcsBios::RotarySyncingPotentiometer radaltHeight("RADALT_HEIGHT", A4, 0x7518, 0xffff, 0);
 //###########################################################################################
 //DcsBios::LED radaltGreenLamp(0x74a0, 0x0100, 19);
 //DcsBios::LED lowAltWarnLt(0x749c, 0x8000, 18);

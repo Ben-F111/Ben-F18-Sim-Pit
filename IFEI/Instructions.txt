@@ -10,6 +10,25 @@ Fill any small lines with Model Putty and Sand with 400 then 800 Paper
 
 Glue with Gel Superglue
 
-paint, Flat Black
+paint, 
+
+all buttons and IFEI Lightplate-com_BL v3 = Flat Black
+Left Lower Instrument Panel Nextion v5-BL v1 = RAL 7037
+
+LEDs are 3mm Green for Light plates
+
+PCB is located @ GitHub\bne-arduino-flight-simulator-interfaces\PCBs\IFEI
+
+
+Buttons x 6 similar to https://www.aliexpress.com/item/32760444535.html
+(google Tactile switch LED Green)
+
+Signal Diodes x 6
+Resistors See PCB
+
+
+Screen is a Nextion 7" Enhanced NX8048K070 (NONE HDMI)
+
+https://www.itead.cc/nextion-nx8048k070.html
 
 For complete parts list, instructions and any other parts, see Open Hornets Github
