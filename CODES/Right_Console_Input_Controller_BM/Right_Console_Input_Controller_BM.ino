@@ -448,6 +448,7 @@ void SendDCSBIOSMessage(int ind, int state) {
         case 94:
           break;
         case 95:
+        sendDcsBiosMessage("RADALT_TEST_SW","0");
           break;
         case 96:
           break;
@@ -698,7 +699,7 @@ void SendDCSBIOSMessage(int ind, int state) {
           sendDcsBiosMessage("WING_FOLD_ROTATE","0");
           break;
         // PRESS - CLOSE
-        case 21:2
+        case 21:
           sendDcsBiosMessage("AV_COOL_SW","0");
           break;
         case 22:
@@ -889,7 +890,8 @@ void SendDCSBIOSMessage(int ind, int state) {
         case 94:
           sendDcsBiosMessage("BLEED_AIR_KNOB","0");
           break;
-        case 95:
+        case 95:     
+        sendDcsBiosMessage("RADALT_TEST_SW","1");
           break;
         case 96:
           break;
@@ -1109,6 +1111,33 @@ DcsBios::PotentiometerEWMA<5, 128, 5> defogHandle("DEFOG_HANDLE", 5); //set//"YY
 
 //KY58 PANEL
 DcsBios::PotentiometerEWMA<5, 128, 5> ky58Volume("KY58_VOLUME", 10); //"YYY" = DCS_BIOS INPUT NAME and X = PIN
+
+// controlPosition: 0 to 65,535 value representing the analog, real world control value
+// dcsPosition: 0 to 65,535 value reported from DCS for the provided address
+// return: −32,768 to 32,767 signed integer to be sent to the DCS rotary control.  0 will not be sent.
+int HornetRadaltMapper(unsigned int controlPosition, unsigned int dcsPosition)
+{
+  unsigned int a = map(controlPosition,0,65530,161000,1800);  // Silly right now, but to reduce the range if your analog pot doesn't reach max deflection, reduce the first 65535 number
+  unsigned int b = map(dcsPosition,0,64355,0,65535);  // Observationally, in DCS the max value for RADALT_HEIGHT is 64355
+
+  // Careful here since we are on 16 bit microcontrollers and doing some signed v unsigned maths.  Probably a better way to do this, but this works.
+  unsigned int delta = (a >= b)?a - b:b-a;
+
+  const unsigned int MAX_ROTATION = 20000;  // Always keep less than 32767
+  if( delta > MAX_ROTATION )
+    delta = MAX_ROTATION;
+
+  if( a >= b )
+    return (int)delta;
+  else
+    return -1*(int)delta;
+}
+
+DcsBios::RotarySyncingPotentiometer radaltHeight("RADALT_HEIGHT", 11, 0x7518, 0xffff, 0, HornetRadaltMapper);
+
+
+
+
 
 
 void loop() {
