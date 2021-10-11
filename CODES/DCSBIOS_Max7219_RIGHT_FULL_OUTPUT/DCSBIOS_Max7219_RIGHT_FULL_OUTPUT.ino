@@ -1,4 +1,5 @@
 /*
+ * COM3
   Tell DCS-BIOS to use a serial connection and use interrupt-driven
   communication. The main program will be interrupted to prioritize
   processing incoming data.
@@ -15,15 +16,11 @@
 #include <Stepper.h>
 #define  STEPS  720    // steps per revolution (limited to 315°)
 //#define  COIL1  50
-//#define  COIL2  51
-//#define  COIL3  52
-//#define  COIL4  53
-//Servo myservo1;  // create servo object to control a servo NUM 1//batt
-//Servo myservo2;  // create servo object to control a servo NUM 2/batt
-//Servo myservo3;  // create servo object to control a servo NUM 1//hyd
-//Servo myservo4;  // create servo object to control a servo NUM 2//hyd
+Servo myservo;  // create servo object to control a servo
 int RAD_ALT = 0;
 int val = 0;
+int CautionWarn;
+
 
 Stepper stepper(STEPS, 50, 51, 52, 53);
 
@@ -801,7 +798,109 @@ DcsBios::ServoOutput voltE(0x753e,46, 1800, 544); // pin18
 DcsBios::ServoOutput hydIndLeft(0x751e, 48, 544, 2400);
 DcsBios::ServoOutput hydIndRight(0x7520, 49, 544, 2400);
 DcsBios::ServoOutput radaltOffFlag(0x751c, 45, 1000, 1420);
+
+
+void onWarnCautionDimmerChange(unsigned int newValue) {
+
+if (newValue <=5000) 
+{
+  lc.setIntensity(0,0);
+  lc.setIntensity(1,0);
+  //BM Note, PETE to work out how to add all
+
+}
+
+if (newValue > 5001 && CautionWarn < 7500) 
+{
+  lc.setIntensity(0,1);
+  lc.setIntensity(1,1);
+  //BM Note, PETE to work out how to add all
+}
+
+if (newValue > 7501 && CautionWarn < 10000) 
+{
+  lc.setIntensity(0,2);
+  lc.setIntensity(1,2);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 10001 && CautionWarn < 12500) 
+{
+  lc.setIntensity(0,3);
+  lc.setIntensity(1,3);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 12501 && CautionWarn < 15000) 
+{
+  lc.setIntensity(0,4);
+  lc.setIntensity(1,4);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 15001 && CautionWarn < 20000) 
+{
+  lc.setIntensity(0,5);
+  lc.setIntensity(1,5);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 20001 && CautionWarn < 25000) 
+{
+  lc.setIntensity(0,6);
+  lc.setIntensity(1,6);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 25001 && CautionWarn < 30000) 
+{
+  lc.setIntensity(0,7);
+  lc.setIntensity(1,7);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 30001 && CautionWarn < 35000) 
+{
+  lc.setIntensity(0,8);
+  lc.setIntensity(1,8);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 35001 && CautionWarn < 40000) 
+{
+  lc.setIntensity(0,9);
+  lc.setIntensity(1,9);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 40001 && CautionWarn < 45000) 
+{
+  lc.setIntensity(0,10);
+  lc.setIntensity(1,10);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 45001 && CautionWarn < 50000) 
+{
+  lc.setIntensity(0,11);
+  lc.setIntensity(1,11);
+  //BM Note, PETE to work out how to add all
+}
+if (newValue > 50001 && CautionWarn < 60000) 
+{
+  lc.setIntensity(0,12);
+  lc.setIntensity(1,12);
+  //BM Note, PETE to work out how to add all
+}
+
+if (newValue > 60001) 
+{
+  lc.setIntensity(0,13);
+  lc.setIntensity(1,13);
+  //BM Note, PETE to work out how to add all
+}
+}
+DcsBios::IntegerBuffer warnCautionDimmerBuffer(0x754c, 0xffff, 0, onWarnCautionDimmerChange);
+
+
+
+
 void setup() {
+   myservo.attach(45);
+myservo.writeMicroseconds(1420);  // set servo to "Off Point"
+delay(300);
+myservo.detach();
    stepper.setSpeed(60);
   stepper.step(720);      
   stepper.step(-720);   
@@ -822,6 +921,7 @@ void setup() {
 //  digitalWrite(STATUS_LED_PORT, 0);
 //  delay(300);  
 
+
   
   devices=lc.getDeviceCount();
   
@@ -829,7 +929,8 @@ void setup() {
     /*The MAX72XX is in power-saving mode on startup*/
     lc.shutdown(address,false);
     /* Set the brightness to a medium values */
-    lc.setIntensity(address,8);
+   // lc.setIntensity(0,1);
+   //  lc.setIntensity(1,1);
     /* and clear the display */
     lc.clearDisplay(address);
   }
