@@ -30,14 +30,18 @@ int FLLW;
 int CODESBIT;
 int SPBIT;
 int OCOFFBIT;
+int ifeiCol; //IFEI Colour (Green or White)
+
+
 
 //################## RPM LEFT ##################Y
 void onIfeiRpmLChange(char* newValue) {
     RPML = atol(newValue);
     nextion.print("t0.txt=\"");
-    nextion.print(RPML);
+      nextion.print(RPML);
     nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
+        nextion.write("\xFF\xFF\xFF");
+   
 }
 DcsBios::StringBuffer<3> ifeiRpmLBuffer(0x749e, onIfeiRpmLChange);
 
@@ -631,7 +635,147 @@ else {
 }
 DcsBios::StringBuffer<1> ifeiRpointerTextureBuffer(0x74da, onIfeiRpointerTextureChange);
 
+///////////// IFEI COLOUR TEXT GREN OR WHITE ///////////////////////
 
+void onIfeiDispIntLtChange(unsigned int newValue) {
+ifeiCol = newValue;
+if(ifeiCol == 0) {
+    nextion.print("t0.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t1.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t2.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t3.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t4.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t5.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t6.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t7.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t8.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t9.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t10.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t11.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t12.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t13.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t14.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t15.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t16.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t17.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t18.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t19.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t20.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t21.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t22.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t23.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t24.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t25.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t26.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t27.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t28.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t29.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t30.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t31.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t32.pco=2016");
+      nextion.write("\xFF\xFF\xFF");
+      }
+       if(ifeiCol == 1) {
+    nextion.print("t0.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t1.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t2.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t3.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t4.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t5.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t6.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t7.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t8.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t9.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t10.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t11.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t12.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t13.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t14.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t15.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t16.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t17.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t18.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t19.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t20.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t21.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t22.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t23.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t24.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t25.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t26.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t27.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t28.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t29.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t30.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t31.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t32.pco=65535");
+      nextion.write("\xFF\xFF\xFF");}
+}
+DcsBios::IntegerBuffer ifeiDispIntLtBuffer(0x74d6, 0x2000, 13, onIfeiDispIntLtChange);
 
 /////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 

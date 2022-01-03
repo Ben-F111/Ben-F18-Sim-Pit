@@ -1,6 +1,6 @@
 
 // F18 IFEI Arduino to Nextion Ver.12G - Ben Melrose (FP Flight Panels)
-
+//com6
 
 #define DCSBIOS_IRQ_SERIAL
 #include "DcsBios.h"
@@ -30,14 +30,18 @@ int FLLW;
 int CODESBIT;
 int SPBIT;
 int OCOFFBIT;
+int ifeiCol; //IFEI Colour (Green or White)
+
+
 
 //################## RPM LEFT ##################Y
 void onIfeiRpmLChange(char* newValue) {
     RPML = atol(newValue);
     nextion.print("t0.txt=\"");
-    nextion.print(RPML);
+      nextion.print(RPML);
     nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
+        nextion.write("\xFF\xFF\xFF");
+   
 }
 DcsBios::StringBuffer<3> ifeiRpmLBuffer(0x749e, onIfeiRpmLChange);
 
@@ -426,6 +430,7 @@ DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74c0, onIfeiFfTextureChange);
 void onExtNozzlePosLChange(unsigned int newValue) {
 //if (NOZOFF == HIGH){
 NOZL = map(newValue, 0, 65535, 0, 100);
+if (ifeiCol == 1) {
    switch (NOZL) { // NOZ LEFT POSITION IFEI
       case 0 ... 9: nextion.print("p0.pic=0"); break;
       case 10 ... 19: nextion.print("p0.pic=1"); break;
@@ -439,8 +444,24 @@ NOZL = map(newValue, 0, 65535, 0, 100);
       case 90 ... 95: nextion.print("p0.pic=9"); break;
       case 96 ... 100: nextion.print("p0.pic=10"); break;
     }
-  nextion.write("\xFF\xFF\xFF");
-
+    nextion.write("\xFF\xFF\xFF");
+}
+else if (ifeiCol == 0) {
+     switch (NOZL) { // NOZ RIGHT POSITION IFEI
+      case 0 ... 9: nextion.print("p0.pic=26"); break;
+      case 10 ... 19: nextion.print("p0.pic=27"); break;
+      case 20 ... 29: nextion.print("p0.pic=28"); break;
+      case 30 ... 39: nextion.print("p0.pic=29"); break;
+      case 40 ... 49: nextion.print("p0.pic=30"); break;
+      case 50 ... 59: nextion.print("p0.pic=31"); break;
+      case 60 ... 69: nextion.print("p0.pic=32"); break;
+      case 70 ... 79: nextion.print("p0.pic=33"); break;
+      case 80 ... 89: nextion.print("p0.pic=34"); break;
+      case 90 ... 95: nextion.print("p0.pic=35"); break;
+      case 96 ... 100: nextion.print("p0.pic=36"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+  }
 }
 DcsBios::IntegerBuffer extNozzlePosLBuffer(0x7568, 0xffff, 0, onExtNozzlePosLChange);
 
@@ -448,6 +469,7 @@ DcsBios::IntegerBuffer extNozzlePosLBuffer(0x7568, 0xffff, 0, onExtNozzlePosLCha
 
 void onExtNozzlePosRChange(unsigned int newValue) {
 NOZR = map(newValue, 0, 65535, 0, 100);
+if (ifeiCol == 1) {
    switch (NOZR) { // NOZ RIGHT POSITION IFEI
       case 0 ... 9: nextion.print("p1.pic=11"); break;
       case 10 ... 19: nextion.print("p1.pic=12"); break;
@@ -463,6 +485,23 @@ NOZR = map(newValue, 0, 65535, 0, 100);
     }
     nextion.write("\xFF\xFF\xFF");
 }
+else if (ifeiCol == 0) {
+   switch (NOZR) { // NOZ RIGHT POSITION IFEI
+      case 0 ... 9: nextion.print("p1.pic=37"); break;
+      case 10 ... 19: nextion.print("p1.pic=38"); break;
+      case 20 ... 29: nextion.print("p1.pic=39"); break;
+      case 30 ... 39: nextion.print("p1.pic=40"); break;
+      case 40 ... 49: nextion.print("p1.pic=41"); break;
+      case 50 ... 59: nextion.print("p1.pic=42"); break;
+      case 60 ... 69: nextion.print("p1.pic=43"); break;
+      case 70 ... 79: nextion.print("p1.pic=44"); break;
+      case 80 ... 89: nextion.print("p1.pic=45"); break;
+      case 90 ... 95: nextion.print("p1.pic=46"); break;
+      case 96 ... 100: nextion.print("p1.pic=47"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+  }
+}
 DcsBios::IntegerBuffer extNozzlePosRBuffer(0x7566, 0xffff, 0, onExtNozzlePosRChange);
 
 ///////////// OIL Texture ///////////////////////
@@ -476,8 +515,6 @@ void onIfeiOilTextureChange(char* newValue) {
     nextion.print("NOZ"); //NOZ LABLE
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
-
- 
   }
   else if (strcmp(newValue, "0") == 0) {
     nextion.print("t16.txt=\"");
@@ -631,7 +668,147 @@ else {
 }
 DcsBios::StringBuffer<1> ifeiRpointerTextureBuffer(0x74da, onIfeiRpointerTextureChange);
 
+///////////// IFEI COLOUR TEXT GREN OR WHITE ///////////////////////
 
+void onIfeiDispIntLtChange(unsigned int newValue) {
+ifeiCol = newValue;
+if(ifeiCol == 0) {
+    nextion.print("t0.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t1.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t2.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t3.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t4.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t5.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t6.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t7.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t8.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t9.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t10.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t11.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t12.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t13.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t14.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t15.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t16.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t17.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t18.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t19.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t20.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t21.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t22.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t23.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t24.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t25.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t26.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t27.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t28.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t29.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t30.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t31.pco=2016");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t32.pco=2016");
+      nextion.write("\xFF\xFF\xFF");
+      }
+       if(ifeiCol == 1) {
+    nextion.print("t0.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t1.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t2.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t3.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t4.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t5.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t6.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t7.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t8.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t9.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t10.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t11.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t12.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t13.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t14.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t15.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t16.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t17.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t18.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t19.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t20.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t21.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t22.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t23.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t24.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t25.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t26.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t27.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t28.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t29.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t30.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t31.pco=65535");
+         nextion.write("\xFF\xFF\xFF");
+    nextion.print("t32.pco=65535");
+      nextion.write("\xFF\xFF\xFF");}
+}
+DcsBios::IntegerBuffer ifeiDispIntLtBuffer(0x74d6, 0x2000, 13, onIfeiDispIntLtChange);
 
 /////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 

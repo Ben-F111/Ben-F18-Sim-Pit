@@ -1,5 +1,7 @@
 #include <FastLED.h>
-
+#define DCSBIOS_IRQ_SERIAL
+#define DCSBIOS_IRQ_SERIAL
+#include "DcsBios.h"
 #define NUM_LEDS_CHA 400
 #define DATA_PIN_CHA 16
 
@@ -25,8 +27,12 @@ void setup()
  // FastLED.addLeds(leds, NUM_LEDS); 
 }
 
-void loop() 
-{ 
+void loop() {
+
+    green(); 
+
+}
+void green() {
  int mappedValue = map(analogRead(brightnessInPin), 30, 1023, 0, 255);
  FastLED.setBrightness(constrain(mappedValue, MIN_BRIGHTNESS, MAX_BRIGHTNESS));
 
@@ -34,5 +40,4 @@ void loop()
   fill_solid(leds_B, NUM_LEDS_CHB, CRGB::Red); // Set all to ##GREEN##.
 
       FastLED.show();
-
 }

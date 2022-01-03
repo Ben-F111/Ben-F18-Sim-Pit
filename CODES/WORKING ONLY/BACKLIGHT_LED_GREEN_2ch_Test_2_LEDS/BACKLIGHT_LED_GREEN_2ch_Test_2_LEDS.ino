@@ -1,5 +1,7 @@
 #include <FastLED.h>
-
+#define DCSBIOS_IRQ_SERIAL
+#define DCSBIOS_IRQ_SERIAL
+#include "DcsBios.h"
 #define NUM_LEDS_CHA 400
 #define DATA_PIN_CHA 16
 
