@@ -1,6 +1,9 @@
 //We always have to include the library
 #include "LedControl.h"
-
+//HORNET FORWARD OUTPUT (ALL)
+//Arduino DUE
+//SN - 859373138373516121E2
+//MAC - A8:61:0A:AE:83:10
 /*
  Now we need a LedControl to work with.
  ***** These pin numbers will probably not work with your hardware *****
@@ -9,10 +12,10 @@
  pin 10 is connected to LOAD 
  We have only a single MAX72XX.
  */
-int NoOfUnits = 9;
+int NoOfUnits = 6;
 LedControl lc=LedControl(16,14,15,NoOfUnits);
 
-int UnitUnderTest = 0;
+int UnitUnderTest = 5;
 
 /* we always wait a bit between updates of the display */
 unsigned long delaytime=20;
@@ -206,10 +209,10 @@ void flashstatusled() {
   delay(500);
 }  
 void loop() { 
-  flashstatusled();
-  AllOn();
-  flashstatusled();
-  AllOff();
-
+  //flashstatusled();
+//  AllOn();
+//  flashstatusled();
+//  AllOff();
+single();
 
 }

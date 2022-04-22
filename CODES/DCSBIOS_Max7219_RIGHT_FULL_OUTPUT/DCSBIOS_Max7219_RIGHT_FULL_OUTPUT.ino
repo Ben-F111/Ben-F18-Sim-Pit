@@ -799,7 +799,8 @@ DcsBios::ServoOutput voltU(0x753c,47, 544, 1800); //pin 16
 DcsBios::ServoOutput voltE(0x753e,46, 1800, 544); // pin18
 DcsBios::ServoOutput hydIndLeft(0x751e, 48, 544, 2400);
 DcsBios::ServoOutput hydIndRight(0x7520, 49, 544, 2400);
-DcsBios::ServoOutput radaltOffFlag(0x751c, 45, 1000, 1420);
+DcsBios::ServoOutput radaltOffFlag(0x751c, 45, 1000, 
+);
 
 
 void onWarnCautionDimmerChange(unsigned int newValue) {
