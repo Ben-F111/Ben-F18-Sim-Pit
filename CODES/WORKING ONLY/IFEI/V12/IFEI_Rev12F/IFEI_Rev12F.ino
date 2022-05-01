@@ -1,6 +1,15 @@
 
-// F18 IFEI Arduino to Nextion Ver.12G - Ben Melrose (FP Flight Panels)
+// F18 IFEI Arduino to Nextion Ver.12F - Ben Melrose
 
+/* NOTE – ##IMPORTANT ##
+  AS OF AUG 202O THERE ARE MISSING OUTPUTS FROM DCS REV 10 BIOS
+  THESE HAVE BEEN REPLICATED WITH IF AND IF ELSE STATEMENTS BELOW
+  THESE DO NOT 100% REPLICATE THE IN SCREEN IFEI
+  ONCE (IF) THESE ARE UPDATED A NEW CODE WILL BE RELEASED
+  CODE IS A WORK IN PROGRES
+  
+  BEN
+*/
 
 #define DCSBIOS_IRQ_SERIAL
 #include "DcsBios.h"
@@ -11,78 +20,94 @@ SoftwareSerial nextion(14, 15); // SETS SERIAL TO PINS  14/15 RX/TX1
 int potPin = A0;
 int valPin = 0;
 int brightness;
-//int SPD;
-int RPML; // RPM LEFT
-int RPMR; // RPM RIGHT
+int SPD;
 int NOZL;
 int NOZR;
 int FFXL;
 int FFXR;
 int BINGO;
-int OILL;
-int OILR;
-int TMPL;
-int TMPR;
-int NOZOFF;
-int FLUP;
-int FLLW;
-//int BINGOBIT;
+int FUELT;
+int FUELB;
+int BINGOBIT;
 int CODESBIT;
 int SPBIT;
 int OCOFFBIT;
 
-//################## RPM LEFT ##################Y
+//################## RPM LEFT ##################
+//REMOVE IF - ELSE WHEN DCS-BIOS FIXED TO 3 CHAR
+// RETAIN LAST SET AFTER ELSE
+// SEE VOID LOOP FOR NOZL POSITION
+
 void onIfeiRpmLChange(char* newValue) {
-    RPML = atol(newValue);
+  if (strcmp(newValue, "10") == 0) {
     nextion.print("t0.txt=\"");
-    nextion.print(RPML);
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else {
+    nextion.print("t0.txt=\"");
+    nextion.print(newValue);
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
+  }
+  NOZL = newValue; // SETS RPM TO NOZL - USED BELOW
 }
-DcsBios::StringBuffer<3> ifeiRpmLBuffer(0x749e, onIfeiRpmLChange);
+DcsBios::StringBuffer<2> ifeiRpmLBuffer(0x7494, onIfeiRpmLChange);
 
-//################## RPM RIGHT ##################Y
+//################## RPM RIGHT ##################
+//REMOVE IF - ELSE WHEN DCS-BIOS FIXED TO 3 CHAR
+// RETAIN LAST SET AFTER ELSE
+// SEE VOID LOOP FOR NOZR POSITION
+
 void onIfeiRpmRChange(char* newValue) {
-    RPMR = atol(newValue);
+  if (strcmp(newValue, "10") == 0) {
     nextion.print("t1.txt=\"");
-    nextion.print(RPMR);
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else {
+    nextion.print("t1.txt=\"");
+    nextion.print(newValue);
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
+    NOZR = newValue; // SETS RPM TO NOZR - USED BELOW
+  }
 }
-DcsBios::StringBuffer<3> ifeiRpmRBuffer(0x74a2, onIfeiRpmRChange);
+DcsBios::StringBuffer<2> ifeiRpmRBuffer(0x7496, onIfeiRpmRChange);
 
-//################## TEMP LEFT ##################Y
+//################## TEMP LEFT ##################
 void onIfeiTempLChange(char* newValue) {
-  TMPL = atol(newValue);
   nextion.print("t3.txt=\"");
-  nextion.print(TMPL);
+  nextion.print(newValue);
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<3> ifeiTempLBuffer(0x74a6, onIfeiTempLChange);
+DcsBios::StringBuffer<3> ifeiTempLBuffer(0x7498, onIfeiTempLChange);
 
-
-//################## TEMP RIGHT ##################Y
+//################## TEMP RIGHT ##################
 void onIfeiTempRChange(char* newValue) {
-  TMPR = atol(newValue);
   nextion.print("t2.txt=\"");
-  nextion.print(TMPR);
+  nextion.print(newValue);
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<3> ifeiTempRBuffer(0x74aa, onIfeiTempRChange);
+DcsBios::StringBuffer<3> ifeiTempRBuffer(0x749c, onIfeiTempRChange);
 
-//################## FUEL FLOW LEFT ##################Y
+//################## FUEL FLOW LEFT ##################
 void onIfeiFfLChange(char* newValue) {
   FFXL = atol(newValue);
-  nextion.print("t4.txt=\"");
+  if (strcmp(newValue, "0") == 0) {
+  }
+  else  nextion.print("t4.txt=\"");
   nextion.print(FFXL);
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<3> ifeiFfLBuffer(0x7482, onIfeiFfLChange);
+DcsBios::StringBuffer<3> ifeiFfLBuffer(0x747c, onIfeiFfLChange);
 
-//################## FUEL FLOW RIGHT ##################Y
+//################## FUEL FLOW RIGHT ##################
 void onIfeiFfRChange(char* newValue) {
   FFXR = atol(newValue);
   nextion.print("t5.txt=\"");
@@ -90,32 +115,97 @@ void onIfeiFfRChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<3> ifeiFfRBuffer(0x7486, onIfeiFfRChange);
+DcsBios::StringBuffer<3> ifeiFfRBuffer(0x7480, onIfeiFfRChange);
 
-//################## OIL LEFT ##################Y
+//################## OIL LEFT ##################
+//REMOVE IF - ELSE WHEN DCS-BIOS FIXED TO 3 CHAR
+// RETAIN LAST SET AFTER ELSE
 void onIfeiOilPressLChange(char* newValue) {
-    OILL = atol(newValue);
+  if (strcmp(newValue, "10") == 0) {
     nextion.print("t7.txt=\"");
-    nextion.print(OILL);
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "11") == 0) {
+    nextion.print("t7.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "12") == 0) {
+    nextion.print("t7.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "13") == 0) {
+    nextion.print("t7.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "14") == 0) {
+    nextion.print("t7.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "15") == 0) {
+    nextion.print("t7.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else {
+    nextion.print("t7.txt=\"");
+    nextion.print(newValue);
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
+  }
 }
-DcsBios::StringBuffer<3> ifeiOilPressLBuffer(0x7496, onIfeiOilPressLChange);
+DcsBios::StringBuffer<2> ifeiOilPressLBuffer(0x7490, onIfeiOilPressLChange);
 
-//################## OIL RIGHT ##################Y
+//################## OIL RIGHT ##################
+//REMOVE IF - ELSE WHEN DCS-BIOS FIXED TO 3 CHAR
+// RETAIN LAST SET AFTER ELSE
 void onIfeiOilPressRChange(char* newValue) {
-     OILR = atol(newValue);
-     nextion.print("t6.txt=\"");
-    nextion.print(OILR);
+  if (strcmp(newValue, "10") == 0) {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "11") == 0) {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "12") == 0) {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "13") == 0) {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "14") == 0) {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else if (strcmp(newValue, "15") == 0) {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
+    nextion.print("0\"");
+    nextion.write("\xFF\xFF\xFF");
+  } else {
+    nextion.print("t6.txt=\"");
+    nextion.print(newValue);
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
+  }
 }
-DcsBios::StringBuffer<3> ifeiOilPressRBuffer(0x749a, onIfeiOilPressRChange);
+DcsBios::StringBuffer<2> ifeiOilPressRBuffer(0x7492, onIfeiOilPressRChange);
 
 //################## FUEL LOWER ##################
-
 void onIfeiFuelDownChange(char* newValue) {
- if (newValue[2] == 32) {
+  if (newValue[2] == 32) {
     nextion.print("t9.txt=\"    ");
     nextion.print(newValue);
     nextion.print("\"");
@@ -146,7 +236,7 @@ void onIfeiFuelDownChange(char* newValue) {
     nextion.write("\xFF\xFF\xFF");
   }
 }
-DcsBios::StringBuffer<6> ifeiFuelDownBuffer(0x748a, onIfeiFuelDownChange);
+DcsBios::StringBuffer<6> ifeiFuelDownBuffer(0x7484, onIfeiFuelDownChange);
 
 //################# FUEL UPPER ##################
 void onIfeiFuelUpChange(char* newValue) {
@@ -181,11 +271,39 @@ void onIfeiFuelUpChange(char* newValue) {
     nextion.write("\xFF\xFF\xFF");
   }
 }
-DcsBios::StringBuffer<6> ifeiFuelUpBuffer(0x7490, onIfeiFuelUpChange);
+
+DcsBios::StringBuffer<6> ifeiFuelUpBuffer(0x748a, onIfeiFuelUpChange);
 
 //################## FUEL LOWER (MODE Button)##################
+void onIfeiTimeSetModeChange(char* newValue) {
+  if (newValue[2] == 32) {
+    nextion.print("t9.txt=\"    ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[4] == 32) {
+    nextion.print("t9.txt=\"  ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else if (newValue[5] == 32) {
+    nextion.print("t9.txt=\" ");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+  else {
+    nextion.print("t9.txt=\"");
+    nextion.print(newValue);
+    nextion.print("\"");
+    nextion.write("\xFF\xFF\xFF");
+  }
+}
+DcsBios::StringBuffer<6> ifeiTimeSetModeBuffer(0x74a8, onIfeiTimeSetModeChange);
 
-//################## BINGO ################## Y
+//################## BINGO ##################
 void onIfeiBingoChange(char* newValue) {
   BINGO = atol(newValue);
   nextion.print("t10.txt=\"");
@@ -193,7 +311,7 @@ void onIfeiBingoChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<5> ifeiBingoBuffer(0x7468, onIfeiBingoChange);
+DcsBios::StringBuffer<6> ifeiBingoBuffer(0x7462, onIfeiBingoChange);
 
 //################## TOP CLOCK ##################
 void onIfeiClockHChange(char* newValue) {
@@ -203,7 +321,7 @@ void onIfeiClockHChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<2> ifeiClockHBuffer(0x746e, onIfeiClockHChange);
+DcsBios::StringBuffer<2> ifeiClockHBuffer(0x7468, onIfeiClockHChange);
 
 // ":"
 
@@ -213,7 +331,7 @@ void onIfeiDd1Change(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<1> ifeiDd1Buffer(0x747a, onIfeiDd1Change);
+DcsBios::StringBuffer<1> ifeiDd1Buffer(0x7474, onIfeiDd1Change);
 
 void onIfeiClockMChange(char* newValue) {
   nextion.print("t22.txt=\"");
@@ -221,7 +339,7 @@ void onIfeiClockMChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<2> ifeiClockMBuffer(0x7470, onIfeiClockMChange);
+DcsBios::StringBuffer<2> ifeiClockMBuffer(0x746a, onIfeiClockMChange);
 
 // ":"
 
@@ -231,7 +349,7 @@ void onIfeiDd2Change(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<1> ifeiDd2Buffer(0x747c, onIfeiDd2Change);
+DcsBios::StringBuffer<1> ifeiDd2Buffer(0x7476, onIfeiDd2Change);
 
 void onIfeiClockSChange(char* newValue) {
   nextion.print("t24.txt=\"");
@@ -239,7 +357,7 @@ void onIfeiClockSChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<2> ifeiClockSBuffer(0x7472, onIfeiClockSChange);
+DcsBios::StringBuffer<2> ifeiClockSBuffer(0x746c, onIfeiClockSChange);
 
 //################# TIMMER CLOCK ########################
 void onIfeiTimerHChange(char* newValue) {
@@ -249,7 +367,7 @@ void onIfeiTimerHChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<2> ifeiTimerHBuffer(0x7474, onIfeiTimerHChange);
+DcsBios::StringBuffer<2> ifeiTimerHBuffer(0x746e, onIfeiTimerHChange);
 
 // ":"
 
@@ -259,7 +377,7 @@ void onIfeiDd3Change(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<1> ifeiDd3Buffer(0x747e, onIfeiDd3Change);
+DcsBios::StringBuffer<1> ifeiDd3Buffer(0x7478, onIfeiDd3Change);
 
 void onIfeiTimerMChange(char* newValue) {
   nextion.print("t27.txt=\"");
@@ -267,7 +385,7 @@ void onIfeiTimerMChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<2> ifeiTimerMBuffer(0x7476, onIfeiTimerMChange);
+DcsBios::StringBuffer<2> ifeiTimerMBuffer(0x7470, onIfeiTimerMChange);
 
 // ":"
 
@@ -277,7 +395,7 @@ void onIfeiDd4Change(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<1> ifeiDd4Buffer(0x7480, onIfeiDd4Change);
+DcsBios::StringBuffer<1> ifeiDd4Buffer(0x747a, onIfeiDd4Change);
 
 void onIfeiTimerSChange(char* newValue) {
   nextion.print("t29.txt=\"");
@@ -285,11 +403,12 @@ void onIfeiTimerSChange(char* newValue) {
   nextion.print("\"");
   nextion.write("\xFF\xFF\xFF");
 }
-DcsBios::StringBuffer<2> ifeiTimerSBuffer(0x7478, onIfeiTimerSChange);
+
+DcsBios::StringBuffer<2> ifeiTimerSBuffer(0x7472, onIfeiTimerSChange);
 
 ////////########  IEFI LABELS    #######/////////
 
-// ************** BINGO ***************************
+// ************** BING0 ***************************
 void onIfeiBingoTextureChange(char* newValue) {
   if (strcmp(newValue, "1") == 0) {
     nextion.print("t19.txt=\"");
@@ -349,7 +468,7 @@ void onIfeiBingoTextureChange(char* newValue) {
   }
 }
 
-DcsBios::StringBuffer<1> ifeiBingoTextureBuffer(0x74c6, onIfeiBingoTextureChange);
+DcsBios::StringBuffer<1> ifeiBingoTextureBuffer(0x74b6, onIfeiBingoTextureChange);
 
 // ************** SP (CODES) ***************************
 void onIfeiSpChange(char* newValue) {
@@ -382,7 +501,7 @@ void onIfeiSpChange(char* newValue) {
   }
 }
 
-DcsBios::StringBuffer<3> ifeiSpBuffer(0x74b2, onIfeiSpChange);
+DcsBios::StringBuffer<3> ifeiSpBuffer(0x74a4, onIfeiSpChange);
 
 void onIfeiCodesChange(char* newValue) {
   if (newValue[0] != 32) {
@@ -399,7 +518,7 @@ void onIfeiCodesChange(char* newValue) {
   nextion.write("\xFF\xFF\xFF");
   CODESBIT = LOW;
 }
-DcsBios::StringBuffer<3> ifeiCodesBuffer(0x74ae, onIfeiCodesChange);
+DcsBios::StringBuffer<3> ifeiCodesBuffer(0x74a0, onIfeiCodesChange);
 
 ///////////// FF Texture ///////////////////////
 void onIfeiFfTextureChange(char* newValue) {
@@ -419,51 +538,7 @@ void onIfeiFfTextureChange(char* newValue) {
 
   }
 }
-DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74c0, onIfeiFfTextureChange);
-
-////////######## <><> NOZ LEFT WORKING <><> ########\\\\\\\\
-
-void onExtNozzlePosLChange(unsigned int newValue) {
-//if (NOZOFF == HIGH){
-NOZL = map(newValue, 0, 65535, 0, 100);
-   switch (NOZL) { // NOZ LEFT POSITION IFEI
-      case 0 ... 9: nextion.print("p0.pic=0"); break;
-      case 10 ... 19: nextion.print("p0.pic=1"); break;
-      case 20 ... 29: nextion.print("p0.pic=2"); break;
-      case 30 ... 39: nextion.print("p0.pic=3"); break;
-      case 40 ... 49: nextion.print("p0.pic=4"); break;
-      case 50 ... 59: nextion.print("p0.pic=5"); break;
-      case 60 ... 69: nextion.print("p0.pic=6"); break;
-      case 70 ... 79: nextion.print("p0.pic=7"); break;
-      case 80 ... 89: nextion.print("p0.pic=8"); break;
-      case 90 ... 95: nextion.print("p0.pic=9"); break;
-      case 96 ... 100: nextion.print("p0.pic=10"); break;
-    }
-  nextion.write("\xFF\xFF\xFF");
-
-}
-DcsBios::IntegerBuffer extNozzlePosLBuffer(0x7568, 0xffff, 0, onExtNozzlePosLChange);
-
-////////######## <><> NOZ RIGHT WORKING <><> ########\\\\\\\\
-
-void onExtNozzlePosRChange(unsigned int newValue) {
-NOZR = map(newValue, 0, 65535, 0, 100);
-   switch (NOZR) { // NOZ RIGHT POSITION IFEI
-      case 0 ... 9: nextion.print("p1.pic=11"); break;
-      case 10 ... 19: nextion.print("p1.pic=12"); break;
-      case 20 ... 29: nextion.print("p1.pic=13"); break;
-      case 30 ... 39: nextion.print("p1.pic=14"); break;
-      case 40 ... 49: nextion.print("p1.pic=15"); break;
-      case 50 ... 59: nextion.print("p1.pic=16"); break;
-      case 60 ... 69: nextion.print("p1.pic=17"); break;
-      case 70 ... 79: nextion.print("p1.pic=18"); break;
-      case 80 ... 89: nextion.print("p1.pic=19"); break;
-      case 90 ... 95: nextion.print("p1.pic=20"); break;
-      case 96 ... 100: nextion.print("p1.pic=21"); break;
-    }
-    nextion.write("\xFF\xFF\xFF");
-}
-DcsBios::IntegerBuffer extNozzlePosRBuffer(0x7566, 0xffff, 0, onExtNozzlePosRChange);
+DcsBios::StringBuffer<1> ifeiFfTextureBuffer(0x74b2, onIfeiFfTextureChange);
 
 ///////////// OIL Texture ///////////////////////
 void onIfeiOilTextureChange(char* newValue) {
@@ -472,25 +547,23 @@ void onIfeiOilTextureChange(char* newValue) {
     nextion.print("OIL");
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
-    nextion.print("t21.txt=\"");
-    nextion.print("NOZ"); //NOZ LABLE
+            nextion.print("t21.txt=\"");
+    nextion.print("NOZ");
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
-
- 
   }
   else if (strcmp(newValue, "0") == 0) {
     nextion.print("t16.txt=\"");
     nextion.print("    ");
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
-    nextion.print("t21.txt=\"");
+        nextion.print("t21.txt=\"");
     nextion.print("    ");
     nextion.print("\"");
     nextion.write("\xFF\xFF\xFF");
   }
 }
-DcsBios::StringBuffer<1> ifeiOilTextureBuffer(0x74c4, onIfeiOilTextureChange);
+DcsBios::StringBuffer<1> ifeiOilTextureBuffer(0x74b4, onIfeiOilTextureChange);
 
 ///////////// RPM Texture ///////////////////////
 void onIfeiRpmTextureChange(char* newValue) {
@@ -507,7 +580,8 @@ void onIfeiRpmTextureChange(char* newValue) {
     nextion.write("\xFF\xFF\xFF");
   }
 }
-DcsBios::StringBuffer<1> ifeiRpmTextureBuffer(0x74bc, onIfeiRpmTextureChange);
+DcsBios::StringBuffer<1> ifeiRpmTextureBuffer(0x74ae, onIfeiRpmTextureChange);
+
 
 ///////////// TEMP Texture ///////////////////////
 void onIfeiTempTextureChange(char* newValue) {
@@ -524,7 +598,7 @@ void onIfeiTempTextureChange(char* newValue) {
     nextion.write("\xFF\xFF\xFF");
   }
 }
-DcsBios::StringBuffer<1> ifeiTempTextureBuffer(0x74be, onIfeiTempTextureChange);
+DcsBios::StringBuffer<1> ifeiTempTextureBuffer(0x74b0, onIfeiTempTextureChange);
 
 ///////////// ZULU Texture ///////////////////////
 void onIfeiZTextureChange(char* newValue) {
@@ -541,99 +615,11 @@ void onIfeiZTextureChange(char* newValue) {
     nextion.write("\xFF\xFF\xFF");
   }
 }
-DcsBios::StringBuffer<1> ifeiZTextureBuffer(0x74dc, onIfeiZTextureChange);
-
-
-
-void onIfeiRpointerTextureChange(char* newValue) {
-if (strcmp(newValue, "1") == 0){
-  NOZOFF = HIGH;
-  nextion.print("p0.pic=0");
-  nextion.write("\xFF\xFF\xFF");
-  nextion.print("p1.pic=11");
-  nextion.write("\xFF\xFF\xFF");
-  }
-else {
-  NOZOFF = LOW; 
-  nextion.print("p0.pic=22");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("p1.pic=22");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t0.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t1.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t2.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t3.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t4.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t5.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t6.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF"); 
-
-  nextion.print("t7.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t7.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t10.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t11.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t30.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t31.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-  
-}
-
-}
-DcsBios::StringBuffer<1> ifeiRpointerTextureBuffer(0x74da, onIfeiRpointerTextureChange);
-
-
+DcsBios::StringBuffer<1> ifeiZTextureBuffer(0x74cc, onIfeiZTextureChange);
 
 /////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+////////######## <><> NOZ WORKING <><> ########\\\\\\\\
 
 void setup() {
   //    Serial.begin(57600);
@@ -645,6 +631,65 @@ void setup() {
   DcsBios::setup();
 }
 void loop() {
+{ switch (atoi(NOZL)) { // NOZ LEFT POSITION IFEI
+
+      case 64 ... 67: nextion.print("p0.pic=8"); break;
+      case 68 ... 69: nextion.print("p0.pic=7"); break;
+      case 70 ... 71: nextion.print("p0.pic=5"); break;
+      case 72 ... 73: nextion.print("p0.pic=6"); break;
+      case 74 ... 75: nextion.print("p0.pic=3"); break;
+      case 76 ... 77: nextion.print("p0.pic=2"); break;
+      case 78 ... 79: nextion.print("p0.pic=1"); break;
+      case 80 ... 90: nextion.print("p0.pic=0"); break;
+      case 91 ... 99: nextion.print("p0.pic=1"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+  }
+  {
+    switch (atoi(FFXL)) { // NOZ LEFT POSITION IFEI
+      case 110 ... 119: nextion.print("p0.pic=4"); break;
+      case 120 ... 129: nextion.print("p0.pic=5"); break;
+      case 130 ... 139: nextion.print("p0.pic=5"); break;
+      case 140 ... 149: nextion.print("p0.pic=5"); break;
+      case 150 ... 159: nextion.print("p0.pic=6"); break;
+      case 160 ... 169: nextion.print("p0.pic=6"); break;
+      case 170 ... 179: nextion.print("p0.pic=7"); break;
+      case 180 ... 189: nextion.print("p0.pic=7"); break;
+      case 190 ... 199: nextion.print("p0.pic=8"); break;
+      case 200 ... 209: nextion.print("p0.pic=9"); break;
+      case 210 ... 500: nextion.print("p0.pic=10"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+  }
+{ switch (atoi(NOZR)) { // NOZ RIGHT POSITION IFEI
+      case 64 ... 67: nextion.print("p1.pic=19"); break;
+      case 68 ... 69: nextion.print("p1.pic=18"); break;
+      case 70 ... 71: nextion.print("p1.pic=16"); break;
+      case 72 ... 73: nextion.print("p1.pic=15"); break;
+      case 74 ... 75: nextion.print("p1.pic=14"); break;
+      case 76 ... 77: nextion.print("p1.pic=13"); break;
+      case 78 ... 79: nextion.print("p1.pic=12"); break;
+      case 80 ... 90: nextion.print("p1.pic=11"); break;
+      case 91 ... 99: nextion.print("p1.pic=12"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+  }
+  {
+    switch (atoi(FFXR)) { // NOZ RIGHT POSITION IFEI
+      case 110 ... 119: nextion.print("p1.pic=15"); break;
+      case 120 ... 129: nextion.print("p1.pic=16"); break;
+      case 130 ... 139: nextion.print("p1.pic=16"); break;
+      case 140 ... 149: nextion.print("p1.pic=16"); break;
+      case 150 ... 159: nextion.print("p1.pic=17"); break;
+      case 160 ... 169: nextion.print("p1.pic=17"); break;
+      case 170 ... 179: nextion.print("p1.pic=18"); break;
+      case 180 ... 189: nextion.print("p1.pic=18"); break;
+      case 190 ... 199: nextion.print("p1.pic=19"); break;
+      case 200 ... 209: nextion.print("p1.pic=20"); break;
+      case 210 ... 500: nextion.print("p1.pic=21"); break;
+    }
+    nextion.write("\xFF\xFF\xFF");
+  }
 
   ////////########      END       #######/////////
 
@@ -652,7 +697,7 @@ void loop() {
   ////////########  SCREEN DIM    #######/////////
   delay (0);
   {
-    int brightness = analogRead(A4);
+    int brightness = analogRead(A0);
     int bright = map(brightness, 10, 1100, 2, 100);
     String dim = "dim=" + String(bright);
     brightness = bright;

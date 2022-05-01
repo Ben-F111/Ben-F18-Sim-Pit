@@ -1,43 +1,67 @@
-/*
- * COM8
-  Tell DCS-BIOS to use a serial connection and use interrupt-driven
-  communication. The main program will be interrupted to prioritize
-  processing incoming data.
-  
-  This should work on any Arduino that has an ATMega328 controller
-  (Uno, Pro Mini, many others).
- */
- String readString;
-#include <Servo.h>
-#define DCSBIOS_IRQ_SERIAL
-#define DCSBIOS_IRQ_SERIAL
+// UPDATED TO DSCS-BIOS FP EDITION FOR OPEN HORNET
+
+
+  ////////////////////---||||||||||********||||||||||---\\\\\\\\\\\\\\\\\\\\
+  //||               FUNCTION = HORNET LED OUTPUT MAX 7219              ||\\
+  //||              LOCATION IN THE PIT = LIP LEFTHAND SIDE             ||\\
+  //||            ARDUINO PROCESSOR TYPE = Arduino Mega 2560            ||\\
+  //||      ARDUINO CHIP SERIAL NUMBER = SN - 9593132393135140E002      ||\\
+  //||      ETHERNET SHEILD MAC ADDRESS = MAC - A8:61:0A:AE:83:18       ||\\
+  //||                    CONNECTED COM PORT = COM 8                    ||\\
+  //||               ****ADD ASSIGNED COM PORT NUMBER****               ||\\
+  //||            ****DO CHECK S/N BEFORE UPLOAD NEW DATA****           ||\\
+  ////////////////////---||||||||||********||||||||||---\\\\\\\\\\\\\\\\\\\\
+
+ // Tell DCS-BIOS to use a serial connection and use interrupt-driven
+ // communication. The main program will be interrupted to prioritize
+ // processing incoming data.
+ // 
+ // This should work on any Arduino that has an ATMega328 controller
+ // (Uno, Pro Mini, many others).
+
+
+
+
+ 
+//#define DCSBIOS_IRQ_SERIAL
+#define DCSBIOS_DEFAULT_SERIAL
 #include "LedControl.h"
 #include "DcsBios.h"
-#include <Stepper.h>
-#define  STEPS  720    // steps per revolution (limited to 315°)
-//#define  COIL1  50
-Servo myservo;  // create servo object to control a servo
-int RAD_ALT = 0;
-int val = 0;
-int CautionWarn;
-
-
-Stepper stepper(STEPS, 50, 51, 52, 53);
 
 // Master
-//#define LEFT_EWI 1
-//#define UFC_PANEL 1       // Currently should equal LEFT_EWI
-//#define RIGHT_EWI 2
-//#define CAUTION_PANEL 3
-//#define SELECT_JET_PANEL 0
+// CHIP U1 (C)
+//#define FLAPS_GEAR 2 // CHIP U1
+#define SELECT_JET_PANEL 2 // CHIP U1
+#define AOA 2 // CHIP U1
+#define MASTER_ARM 2 // CHIP U1
 
+// CHIP U2 (A)
+#define LEFT_EWI 0 // CHIP U2
+#define UFC_PANEL 0 // CHIP U2 
+#define BIT_LED 0 // CHIP U2
+#define LEFT_DIS 0 // CHIP U2 // CHECK IF NEEDED    
 
-// Play area
-#define LEFT_EWI 1
-#define UFC_PANEL 1       // Currently should equal LEFT_EWI
+// CHIP U3 (D)
+#define CAUTION_PANEL 3 // CHIP U3 
+#define LOCK_SHOOT 3 // CHIP U3
+#define RIGHT_DIS 3 //CHIP U3 // CHECK IF NEEDED
+
+// CHIP U5 (B)
 #define RIGHT_EWI 1
-#define CAUTION_PANEL 0
+
+// CHIP U4 (E)
+#define AOA_DIM 4 
+
+// CHIP U6 (F)
+#define RWR_DIM 5 
+/*
+// Play area
+#define LEFT_EWI 0
+#define UFC_PANEL 0       // Currently should equal LEFT_EWI
+#define RIGHT_EWI 2
+#define CAUTION_PANEL 3
 #define SELECT_JET_PANEL 1
+*/
 
 // NO GO  - LEFT EWI - ORANGE
 #define NO_GO_A_ROW 0
@@ -126,6 +150,7 @@ Stepper stepper(STEPS, 50, 51, 52, 53);
 #define LEFT_FIRE_D_ROW 7
 #define LEFT_FIRE_D_COL 2
 
+// ######################## RIGHT EWI ########################
 // RCDR ON  - RIGHT EWI - GREEN
 #define RCDR_ON_A_ROW 0
 #define RCDR_ON_A_COL 0
@@ -212,9 +237,6 @@ Stepper stepper(STEPS, 50, 51, 52, 53);
 #define RIGHT_FIRE_D_ROW 7
 #define RIGHT_FIRE_D_COL 2
 
-
-// RIGHT AUX AND CAUTION
-
 #define CK_SEAT_COL_A 0
 #define CK_SEAT_ROW_A 0
 #define CK_SEAT_COL_B 0
@@ -275,132 +297,114 @@ Stepper stepper(STEPS, 50, 51, 52, 53);
 #define C_SPARE_3_COL_B 3
 #define C_SPARE_3_ROW_B 5
 
-#define HOOK_A_COL_A 4
-#define HOOK_A_ROW_A 0
-#define HOOK_B_COL_B 4
-#define HOOK_B_ROW_B 1
-
-#define RAD_ALT_G_COL_A 5
-#define RAD_ALT_G_ROW_A 0
-#define RAD_ALT_R_COL_B 5
-#define RAD_ALT_R_ROW_B 1
-
-
-
-
-
-
-#define UFC_OPT1_COL_A 4
+#define UFC_OPT1_COL_A 4 // CHECKED
 #define UFC_OPT1_ROW_A 4
 #define UFC_OPT1_COL_B 3
 #define UFC_OPT1_ROW_B 4
 
-#define UFC_OPT2_COL_A 4
+#define UFC_OPT2_COL_A 4 // CHECKED
 #define UFC_OPT2_ROW_A 5
 #define UFC_OPT2_COL_B 3
 #define UFC_OPT2_ROW_B 5
 
-#define UFC_OPT3_COL_A 4
+#define UFC_OPT3_COL_A 4 // CHECKED
 #define UFC_OPT3_ROW_A 6
 #define UFC_OPT3_COL_B 3
 #define UFC_OPT3_ROW_B 6
 
-#define UFC_OPT4_COL_A 3
+#define UFC_OPT4_COL_A 3 // CHECKED
 #define UFC_OPT4_ROW_A 7
 #define UFC_OPT4_COL_B 4
 #define UFC_OPT4_ROW_B 7
 
-#define UFC_OPT5_COL_A 5
+#define UFC_OPT5_COL_A 5 // CHECKED
 #define UFC_OPT5_ROW_A 4
 
 
 #define SEL_CENTER_COL_A 0
 #define SEL_CENTER_ROW_A 0
 
-#define SEL_LEFT_INNER_COL_A 1
-#define SEL_LEFT_INNER_ROW_A 0
+#define SEL_LEFT_INNER_COL_A 0
+#define SEL_LEFT_INNER_ROW_A 1
 
-#define SEL_LEFT_OUTER_COL_A 2
-#define SEL_LEFT_OUTER_ROW_A 0
+#define SEL_LEFT_OUTER_COL_A 1
+#define SEL_LEFT_OUTER_ROW_A 1
 
-#define SEL_RIGHT_INNER_COL_A 0
-#define SEL_RIGHT_INNER_ROW_A 1
+#define SEL_RIGHT_INNER_COL_A 1
+#define SEL_RIGHT_INNER_ROW_A 0
 
-#define SEL_RIGHT_OUTER_COL_A 1
-#define SEL_RIGHT_OUTER_ROW_A 1
+#define SEL_RIGHT_OUTER_COL_A 2
+#define SEL_RIGHT_OUTER_ROW_A 0
 
 #define NOSE_GEAR_COL_A 3
 #define NOSE_GEAR_ROW_A 0
 #define NOSE_GEAR_COL_B 3
 #define NOSE_GEAR_ROW_B 1
 
-#define LEFT_GEAR_COL_A 4
-#define LEFT_GEAR_ROW_A 0
-#define LEFT_GEAR_COL_B 4
-#define LEFT_GEAR_ROW_B 1
+#define LEFT_GEAR_COL_A 2
+#define LEFT_GEAR_ROW_A 1
+#define LEFT_GEAR_COL_B 1
+#define LEFT_GEAR_ROW_B 2
 
-#define RIGHT_GEAR_COL_A 2
-#define RIGHT_GEAR_ROW_A 1
-#define RIGHT_GEAR_COL_B 1
-#define RIGHT_GEAR_ROW_B 2
+#define RIGHT_GEAR_COL_A 4
+#define RIGHT_GEAR_ROW_A 0
+#define RIGHT_GEAR_COL_B 4
+#define RIGHT_GEAR_ROW_B 1
 
-#define HALF_FLAPS_COL_A 5
-#define HALF_FLAPS_ROW_A 0
-#define HALF_FLAPS_COL_B 5
-#define HALF_FLAPS_ROW_B 1
+#define HALF_FLAPS_COL_A 0
+#define HALF_FLAPS_ROW_A 2
+#define HALF_FLAPS_COL_B 2
+#define HALF_FLAPS_ROW_B 2
 
-#define FULL_FLAPS_COL_A 0
-#define FULL_FLAPS_ROW_A 2
-#define FULL_FLAPS_COL_B 2
-#define FULL_FLAPS_ROW_B 2
+#define FULL_FLAPS_COL_A 5
+#define FULL_FLAPS_ROW_A 0
+#define FULL_FLAPS_COL_B 5
+#define FULL_FLAPS_ROW_B 1
 
 #define AMBER_FLAPS_COL_A 3
 #define AMBER_FLAPS_ROW_A 2
 #define AMBER_FLAPS_COL_B 4
 #define AMBER_FLAPS_ROW_B 2
 
+// RWR 
+#define RWR_BIT_COL_A 0
+#define RWR_BIT_ROW_A 0
+
+#define RWR_ENABLE_OFFSET_COL_A 0
+#define RWR_ENABLE_OFFSET_ROW_A 1
+
+#define RWR_ENABLE_SPECIAL_COL_A 0
+#define RWR_ENABLE_SPECIAL_ROW_A 2
+
+#define RWR_LIMIT_COL_A 0
+#define RWR_LIMIT_ROW_A 3
+
+#define RWR_ON_COL_A 0
+#define RWR_ON_ROW_A 4
+
+#define RWR_FAIL_RED_COL_A 1
+#define RWR_FAIL_RED_ROW_A 0
+
+#define RWR_OFFSET_COL_A 1
+#define RWR_OFFSET_ROW_A 1
+
+#define RWR_SPECIAL_COL_A 1
+#define RWR_SPECIAL_ROW_A 2
+
+#define RWR_DISPLAY_COL_A 1
+#define RWR_DISPLAY_ROW_A 3
+
+#define RWR_ALR_67_COL_A 1
+#define RWR_ALR_67_ROW_A 4
 
 #define STATUS_LED_PORT 6
-int devices = 2;
+int devices = 6;
 
-LedControl lc=LedControl(10,8,9,devices); 
-
-//9 --> DIN 10
-//8 --> DS 9
-//7 --> CLK 8
-
-
-DcsBios::LED apuControlSw(0x74c2, 0x0100, 13);
+LedControl lc=LedControl(16,14,15,devices); 
 
 /* paste code snippets from the reference documentation here */
 //DcsBios::Switch2Pos lightsTestSw("LIGHTS_TEST_SW", 22);
 //DcsBios::LED sjCtrLt(0x742e, 0x4000, 13);
-
-
-//###########################################################################################
-// TEST USING ROTARY ENC //OUT WHATS NOT USED - WORK BUT NOT ENUGH "STEPS" AND NEEDS TO BE RESET ECH TIME
-//DcsBios::RotaryEncoder radaltHeight("RADALT_HEIGHT", "-3200", "+3200", 16, 17);
-//###########################################################################################
-
-
-//###########################################################################################
-//TEST USING POT //OUT WHATS NOT USED
-//DcsBios::RotarySyncingPotentiometer altSetPressureBuffer("RADALT_HEIGHT", A4, 0x7516, 0xffff, 0);
-//DcsBios::RotarySyncingPotentiometer radaltHeight("RADALT_HEIGHT", A4, 0x7516, 0xffff, 0);
-//###########################################################################################
-//DcsBios::LED radaltGreenLamp(0x74a0, 0x0100, 19);
-//DcsBios::LED lowAltWarnLt(0x749c, 0x8000, 18);
-//DcsBios::Switch2Pos radaltTestSw("RADALT_TEST_SW", 0);
-
-//###########################################################################################
-void onRadaltAltPtrChange(unsigned int newValue) {
-RAD_ALT = map(newValue, 0, 65000, 720, 0);
-}
-DcsBios::IntegerBuffer radaltAltPtrBuffer(0x751a, 0xffff, 0, onRadaltAltPtrChange);
-//###########################################################################################
-
-
-//DcsBios::ServoOutput radaltOffFlag(0x751c,2, 1000, 1420); //happy
 
 
 void onFlpLgRightGearLtChange(unsigned int newValue) {
@@ -427,7 +431,6 @@ void onFlpLgHalfFlapsLtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer flpLgHalfFlapsLtBuffer(0x7430, 0x4000, 14, onFlpLgHalfFlapsLtChange);
 
-
 void onFlpLgFullFlapsLtChange(unsigned int newValue) {
   lc.setLed(SELECT_JET_PANEL,FULL_FLAPS_COL_A,FULL_FLAPS_ROW_A,newValue);
   lc.setLed(SELECT_JET_PANEL,FULL_FLAPS_COL_B,FULL_FLAPS_ROW_B,newValue);  
@@ -438,7 +441,7 @@ void onFlpLgFlapsLtChange(unsigned int newValue) {
   lc.setLed(SELECT_JET_PANEL,AMBER_FLAPS_COL_A,AMBER_FLAPS_ROW_A,newValue);
   lc.setLed(SELECT_JET_PANEL,AMBER_FLAPS_COL_B,AMBER_FLAPS_ROW_B,newValue); 
 }
-DcsBios::IntegerBuffer flpLgFlapsLtBuffer(0x7460, 0x0001, 0, onFlpLgFlapsLtChange);
+DcsBios::IntegerBuffer flpLgFlapsLtBuffer(0x7466, 0x0001, 0, onFlpLgFlapsLtChange);
 
 void onSjRoLtChange(unsigned int newValue) {
 lc.setLed(SELECT_JET_PANEL,SEL_RIGHT_OUTER_COL_A,SEL_RIGHT_OUTER_ROW_A,newValue);
@@ -455,7 +458,6 @@ void onSjLoLtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer sjLoLtBuffer(0x7430, 0x0100, 8, onSjLoLtChange);
 
-
 void onSjLiLtChange(unsigned int newValue) {
   lc.setLed(SELECT_JET_PANEL,SEL_LEFT_INNER_COL_A,SEL_LEFT_INNER_ROW_A,newValue);
 }
@@ -466,7 +468,7 @@ void onSjCtrLtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer sjCtrLtBuffer(0x742e, 0x4000, 14, onSjCtrLtChange);
 
-
+// ################# UFC ################# 
 void onUfcOptionCueing1Change(char* newValue) {
   if (newValue[0] == ':') {
     lc.setLed(UFC_PANEL,UFC_OPT1_COL_A,UFC_OPT1_ROW_A,1);
@@ -507,7 +509,6 @@ void onUfcOptionCueing4Change(char* newValue) {
 }
 DcsBios::StringBuffer<1> ufcOptionCueing4Buffer(0x742e, onUfcOptionCueing4Change);
 
-
 void onUfcOptionCueing5Change(char* newValue) {
   if (newValue[0] == ':') {
     lc.setLed(UFC_PANEL,UFC_OPT5_COL_A,UFC_OPT5_ROW_A,1); }
@@ -516,11 +517,8 @@ void onUfcOptionCueing5Change(char* newValue) {
 }
 DcsBios::StringBuffer<1> ufcOptionCueing5Buffer(0x7430, onUfcOptionCueing5Change);
 
-
-
-
-
-
+////  ||||  \\\\
+//CAUTION PANEL\\
 
 void onClipApuAccLtChange(unsigned int newValue) {
   lc.setLed(CAUTION_PANEL,APU_ACC_COL_A,APU_ACC_ROW_A,newValue);
@@ -539,7 +537,6 @@ void onClipCkSeatLtChange(unsigned int newValue) {
   lc.setLed(CAUTION_PANEL,CK_SEAT_COL_B,CK_SEAT_ROW_B,newValue);
 }
 DcsBios::IntegerBuffer clipCkSeatLtBuffer(0x74a0, 0x8000, 15, onClipCkSeatLtChange);
-
 
 void onClipFcesLtChange(unsigned int newValue) {
   lc.setLed(CAUTION_PANEL,FCES_COL_A,FCES_ROW_A,newValue);
@@ -577,7 +574,6 @@ void onClipRGenLtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer clipRGenLtBuffer(0x74a8, 0x0200, 9, onClipRGenLtChange);
 
-
 void onClipSpareCtn1LtChange(unsigned int newValue) {
   lc.setLed(CAUTION_PANEL,C_SPARE_1_COL_A,C_SPARE_1_ROW_A,newValue);
   lc.setLed(CAUTION_PANEL,C_SPARE_1_COL_B,C_SPARE_1_ROW_B,newValue);
@@ -590,35 +586,13 @@ void onClipSpareCtn2LtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer clipSpareCtn2LtBuffer(0x74a4, 0x8000, 15, onClipSpareCtn2LtChange);
 
-
 void onClipSpareCtn3LtChange(unsigned int newValue) {
   lc.setLed(CAUTION_PANEL,C_SPARE_3_COL_A,C_SPARE_3_ROW_A,newValue);
   lc.setLed(CAUTION_PANEL,C_SPARE_3_COL_B,C_SPARE_3_ROW_B,newValue);  
 }
 DcsBios::IntegerBuffer clipSpareCtn3LtBuffer(0x74a8, 0x0400, 10, onClipSpareCtn3LtChange);
 
-//RADAR ALT LED 
-void onRadaltGreenLampChange(unsigned int newValue) {
-  lc.setLed(CAUTION_PANEL,RAD_ALT_G_COL_A,RAD_ALT_G_ROW_A,newValue);
- }
-DcsBios::IntegerBuffer radaltGreenLampBuffer(0x74a0, 0x0100, 8, onRadaltGreenLampChange);
-
-void onLowAltWarnLtChange(unsigned int newValue) {
-lc.setLed(CAUTION_PANEL,RAD_ALT_R_COL_B,RAD_ALT_R_ROW_B,newValue);
-}
-DcsBios::IntegerBuffer lowAltWarnLtBuffer(0x749c, 0x8000, 15, onLowAltWarnLtChange);
-
-// HOOK LED
-
-void onArrestingHookLtChange(unsigned int newValue) {
-  lc.setLed(CAUTION_PANEL,HOOK_A_COL_A,HOOK_A_ROW_A,newValue);
-  lc.setLed(CAUTION_PANEL,HOOK_B_COL_B,HOOK_B_ROW_B,newValue);  
-}
-DcsBios::IntegerBuffer arrestingHookLtBuffer(0x74a0, 0x0400, 10, onArrestingHookLtChange);
-
-
-// EWI
-
+/*//********** LEFT EWI **********\\*/
 void onFireLeftLtChange(unsigned int newValue) {
   lc.setLed(LEFT_EWI,LEFT_FIRE_A_COL,LEFT_FIRE_A_ROW,newValue);
   lc.setLed(LEFT_EWI,LEFT_FIRE_B_COL,LEFT_FIRE_B_ROW,newValue);
@@ -641,13 +615,11 @@ void onLhAdvGoChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer lhAdvGoBuffer(0x740a, 0x0010, 4, onLhAdvGoChange);
 
-
 void onLhAdvNoGoChange(unsigned int newValue) {
   lc.setLed(LEFT_EWI,NO_GO_A_COL,NO_GO_A_ROW,newValue);
   lc.setLed(LEFT_EWI,NO_GO_B_COL,NO_GO_B_ROW,newValue);
 }
 DcsBios::IntegerBuffer lhAdvNoGoBuffer(0x740a, 0x0020, 5, onLhAdvNoGoChange);
-
 
 void onLhAdvLBleedChange(unsigned int newValue) {
   lc.setLed(LEFT_EWI,L_BLEED_A_COL,L_BLEED_A_ROW,newValue);
@@ -673,13 +645,11 @@ void onLhAdvStbyChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer lhAdvStbyBuffer(0x7408, 0x4000, 14, onLhAdvStbyChange);
 
-
 void onLhAdvLBarRedChange(unsigned int newValue) {
   lc.setLed(LEFT_EWI,L_BAR_RED_A_COL,L_BAR_RED_A_ROW,newValue);
   lc.setLed(LEFT_EWI,L_BAR_RED_B_COL,L_BAR_RED_B_ROW,newValue);
 }
 DcsBios::IntegerBuffer lhAdvLBarRedBuffer(0x7408, 0x8000, 15, onLhAdvLBarRedChange);
-
 
 void onLhAdvRecChange(unsigned int newValue) {
   lc.setLed(LEFT_EWI,REC_A_COL,REC_A_ROW,newValue);
@@ -705,7 +675,7 @@ void onLhAdvAspjOhChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer lhAdvAspjOhBuffer(0x740a, 0x0008, 3, onLhAdvAspjOhChange);
 
-
+//RIGHT EWI
 void onRhAdvDispChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,DISP_A_COL,DISP_A_ROW,newValue);
   lc.setLed(RIGHT_EWI,DISP_B_COL,DISP_B_ROW,newValue);
@@ -717,7 +687,6 @@ void onRhAdvRcdrOnChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,RCDR_ON_B_COL,RCDR_ON_B_ROW,newValue);
 }
 DcsBios::IntegerBuffer rhAdvRcdrOnBuffer(0x740a, 0x0080, 7, onRhAdvRcdrOnChange);
-
 
 void onRhAdvSpareRh1Change(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,SPARE_1_A_COL,SPARE_1_A_ROW,newValue);
@@ -743,7 +712,6 @@ void onRhAdvSpareRh4Change(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer rhAdvSpareRh4Buffer(0x740c, 0x0001, 0, onRhAdvSpareRh4Change);
 
-
 void onRhAdvSamChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,SAM_A_COL,SAM_A_ROW,newValue);
   lc.setLed(RIGHT_EWI,SAM_B_COL,SAM_B_ROW,newValue);
@@ -762,20 +730,17 @@ void onRhAdvAiChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer rhAdvAiBuffer(0x740a, 0x0400, 10, onRhAdvAiChange);
 
-
 void onRhAdvAaaChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,AAA_A_COL,AAA_A_ROW,newValue);
   lc.setLed(RIGHT_EWI,AAA_B_COL,AAA_B_ROW,newValue);   
 }
 DcsBios::IntegerBuffer rhAdvAaaBuffer(0x740a, 0x0800, 11, onRhAdvAaaChange);
 
-
 void onRhAdvCwChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,CW_A_COL,CW_A_ROW,newValue);
   lc.setLed(RIGHT_EWI,CW_B_COL,CW_B_ROW,newValue);
 }
 DcsBios::IntegerBuffer rhAdvCwBuffer(0x740a, 0x1000, 12, onRhAdvCwChange);
-
 
 void onFireApuLtChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,APU_FIRE_A_COL,APU_FIRE_A_ROW,newValue);
@@ -785,8 +750,6 @@ void onFireApuLtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer fireApuLtBuffer(0x740c, 0x0004, 2, onFireApuLtChange);
 
-
-
 void onFireRightLtChange(unsigned int newValue) {
   lc.setLed(RIGHT_EWI,RIGHT_FIRE_A_COL,RIGHT_FIRE_A_ROW,newValue);
   lc.setLed(RIGHT_EWI,RIGHT_FIRE_B_COL,RIGHT_FIRE_B_ROW,newValue);
@@ -795,118 +758,55 @@ void onFireRightLtChange(unsigned int newValue) {
 }
 DcsBios::IntegerBuffer fireRightLtBuffer(0x740c, 0x0010, 4, onFireRightLtChange);
 
-DcsBios::ServoOutput voltU(0x753c,47, 544, 1800); //pin 16
-DcsBios::ServoOutput voltE(0x753e,46, 1800, 544); // pin18
-DcsBios::ServoOutput hydIndLeft(0x751e, 48, 544, 2400);
-DcsBios::ServoOutput hydIndRight(0x7520, 49, 544, 2400);
-DcsBios::ServoOutput radaltOffFlag(0x751c, 45, 1000, 
-);
+void onRwrBitLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_BIT_COL_A,RWR_BIT_ROW_A,newValue);
+}
+DcsBios::IntegerBuffer rwrBitLtBuffer(0x749c, 0x1000, 12, onRwrBitLtChange);
 
+void onRwrEnableLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_ENABLE_OFFSET_COL_A,RWR_ENABLE_OFFSET_ROW_A,newValue);
+}
+DcsBios::IntegerBuffer rwrEnableLtBuffer(0x749c, 0x0200, 9, onRwrEnableLtChange);
 
-void onWarnCautionDimmerChange(unsigned int newValue) {
+void onRwrSpecialEnLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_ENABLE_SPECIAL_COL_A,RWR_ENABLE_SPECIAL_ROW_A,newValue);
+}
+DcsBios::IntegerBuffer rwrSpecialEnLtBuffer(0x7498, 0x8000, 15, onRwrSpecialEnLtChange);
 
-if (newValue <=5000) 
-{
-  lc.setIntensity(0,0);
-  lc.setIntensity(1,0);
-  //BM Note, PETE to work out how to add all
+void onRwrLimitLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_LIMIT_COL_A,RWR_LIMIT_ROW_A,newValue);
+}
+DcsBios::IntegerBuffer rwrLimitLtBuffer(0x7498, 0x2000, 13, onRwrLimitLtChange);
 
+void onRwrLowerLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_ON_COL_A,RWR_ON_ROW_A,newValue); 
+ lc.setLed(RWR_DIM,RWR_ALR_67_COL_A,RWR_ALR_67_ROW_A,newValue);
+ //INVESTIGATE TO ADD TO BACKLIGHTING
 }
+DcsBios::IntegerBuffer rwrLowerLtBuffer(0x7498, 0x1000, 12, onRwrLowerLtChange);
 
-if (newValue > 5001 && CautionWarn < 7500) 
-{
-  lc.setIntensity(0,1);
-  lc.setIntensity(1,1);
-  //BM Note, PETE to work out how to add all
+void onRwrFailLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_FAIL_RED_COL_A,RWR_FAIL_RED_ROW_A,newValue);
 }
+DcsBios::IntegerBuffer rwrFailLtBuffer(0x749c, 0x0800, 11, onRwrFailLtChange);
 
-if (newValue > 7501 && CautionWarn < 10000) 
-{
-  lc.setIntensity(0,2);
-  lc.setIntensity(1,2);
-  //BM Note, PETE to work out how to add all
+void onRwrOffsetLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_OFFSET_COL_A,RWR_OFFSET_ROW_A,newValue);
 }
-if (newValue > 10001 && CautionWarn < 12500) 
-{
-  lc.setIntensity(0,3);
-  lc.setIntensity(1,3);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 12501 && CautionWarn < 15000) 
-{
-  lc.setIntensity(0,4);
-  lc.setIntensity(1,4);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 15001 && CautionWarn < 20000) 
-{
-  lc.setIntensity(0,5);
-  lc.setIntensity(1,5);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 20001 && CautionWarn < 25000) 
-{
-  lc.setIntensity(0,6);
-  lc.setIntensity(1,6);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 25001 && CautionWarn < 30000) 
-{
-  lc.setIntensity(0,7);
-  lc.setIntensity(1,7);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 30001 && CautionWarn < 35000) 
-{
-  lc.setIntensity(0,8);
-  lc.setIntensity(1,8);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 35001 && CautionWarn < 40000) 
-{
-  lc.setIntensity(0,9);
-  lc.setIntensity(1,9);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 40001 && CautionWarn < 45000) 
-{
-  lc.setIntensity(0,10);
-  lc.setIntensity(1,10);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 45001 && CautionWarn < 50000) 
-{
-  lc.setIntensity(0,11);
-  lc.setIntensity(1,11);
-  //BM Note, PETE to work out how to add all
-}
-if (newValue > 50001 && CautionWarn < 60000) 
-{
-  lc.setIntensity(0,12);
-  lc.setIntensity(1,12);
-  //BM Note, PETE to work out how to add all
-}
+DcsBios::IntegerBuffer rwrOffsetLtBuffer(0x749c, 0x0400, 10, onRwrOffsetLtChange);
 
-if (newValue > 60001) 
-{
-  lc.setIntensity(0,13);
-  lc.setIntensity(1,13);
-  //BM Note, PETE to work out how to add all
+void onRwrSpecialLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_SPECIAL_COL_A,RWR_SPECIAL_ROW_A,newValue);
 }
+DcsBios::IntegerBuffer rwrSpecialLtBuffer(0x749c, 0x0100, 8, onRwrSpecialLtChange);
+
+void onRwrDisplayLtChange(unsigned int newValue) {
+ lc.setLed(RWR_DIM,RWR_DISPLAY_COL_A,RWR_DISPLAY_ROW_A,newValue);
 }
-DcsBios::IntegerBuffer warnCautionDimmerBuffer(0x754c, 0xffff, 0, onWarnCautionDimmerChange);
-
-
+DcsBios::IntegerBuffer rwrDisplayLtBuffer(0x7498, 0x4000, 14, onRwrDisplayLtChange);
 
 
 void setup() {
-   myservo.attach(45);
-myservo.writeMicroseconds(1420);  // set servo to "Off Point"
-delay(300);
-myservo.detach();
-   stepper.setSpeed(60);
-  stepper.step(720);      
-  stepper.step(-720);   
 
 //  pinMode(STATUS_LED_PORT, OUTPUT);
 //  digitalWrite(STATUS_LED_PORT, 0);
@@ -924,7 +824,6 @@ myservo.detach();
 //  digitalWrite(STATUS_LED_PORT, 0);
 //  delay(300);  
 
-
   
   devices=lc.getDeviceCount();
   
@@ -932,32 +831,13 @@ myservo.detach();
     /*The MAX72XX is in power-saving mode on startup*/
     lc.shutdown(address,false);
     /* Set the brightness to a medium values */
-   // lc.setIntensity(0,1);
-   //  lc.setIntensity(1,1);
+    lc.setIntensity(address,8);
     /* and clear the display */
     lc.clearDisplay(address);
   }
   DcsBios::setup();
 }
 
-//####################################################### ####################################
-/// RADAR ALT LOOP WORKING ======>
-int pos=0;              
-void loop(){
-  val = RAD_ALT;
-  if(abs(val - pos)> 2){         //if diference is greater than 2 steps.
-      if((val - pos)> 0){
-          stepper.step(-1);      // move one step to the left.
-          pos++;
-          }
-      if((val - pos)< 0){
-          stepper.step(1);       // move one step to the right.
-          pos--;
-          }
-/// RADAR ALT LOOP WORKING ======<
-//###########################################################################################
-          
-      }
-
+void loop() {
   DcsBios::loop();
 }
