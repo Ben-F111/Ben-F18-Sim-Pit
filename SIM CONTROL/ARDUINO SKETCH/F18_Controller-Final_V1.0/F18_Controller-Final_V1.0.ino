@@ -8,7 +8,7 @@
  * the library is located in the same folder you got this sketch from
  * 
  * if you download the file from ITEAD" you will need to make the below 3 changes, 
- * these have been made in the file located with this Sketch
+ * these have been made in the library located with this Sketch already
  * In NexConfig.h  
  * 
  * Current #define DEBUG_SERIAL_ENABLE
@@ -24,12 +24,12 @@
  * 
  * "SIM_CONTROL_V2.1.HMI"
  * 
- * Arduino need to be an ARDUINO LEONARDO ir other ATmega32u4 Board
- * it will not work on an ARDUINO MEGA, due to the Keyboard output requirment
+ * Arduino need to be an ARDUINO LEONARDO or other ATmega32u4 Board
+ * it will not work on an ARDUINO MEGA, due to the Keyboard output requirement
  * 
  * the screen is a 7" Nextion can be purchased from
  * https://itead.cc/product/nx8048k070-nextion-7-0-enhanced-series-hmi-touch-display/
- * the file has only been comiled for this version
+ * the file has only been compiled for this version
  * 
  * the "joystick Mouse" is a 5 wire, I used this from Jaycar (Aus)
  * 
@@ -43,10 +43,10 @@
  * 
  * Keyboard mapping is standard DCS F18, I have not added any special key bindings
  * 
- * note this is the early verisons and ner files will be required
+ * note this is the early versions and new files will be required
  * 
  * Mount can be located here, however it needs work and is not perfect yet
- * 
+ * SIM CONTROL\Mount
  * 
  */
 
