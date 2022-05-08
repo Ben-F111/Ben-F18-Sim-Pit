@@ -1,4 +1,8 @@
+#include <Nextion.h>          // Nextion Library
+//#include <SoftwareSerial.h>   // Library for Software Serial Port
+//#include <Keyboard.h>         // Keyboard Emulation
 
+<<<<<<< Updated upstream
 // F18 IFEI Arduino to Nextion Ver.12G - Ben Melrose (FP Flight Panels)
 
 
@@ -491,172 +495,25 @@ void onIfeiOilTextureChange(char* newValue) {
   }
 }
 DcsBios::StringBuffer<1> ifeiOilTextureBuffer(0x74c4, onIfeiOilTextureChange);
+=======
+//#include <Arduino.h>
+>>>>>>> Stashed changes
 
-///////////// RPM Texture ///////////////////////
-void onIfeiRpmTextureChange(char* newValue) {
-  if (strcmp(newValue, "1") == 0) {
-    nextion.print("t13.txt=\"");
-    nextion.print("RPM");
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-  }
-  else if (strcmp(newValue, "0") == 0) {
-    nextion.print("t13.txt=\"");
-    nextion.print("      ");
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-  }
-}
-DcsBios::StringBuffer<1> ifeiRpmTextureBuffer(0x74bc, onIfeiRpmTextureChange);
-
-///////////// TEMP Texture ///////////////////////
-void onIfeiTempTextureChange(char* newValue) {
-  if (strcmp(newValue, "1") == 0) {
-    nextion.print("t14.txt=\"");
-    nextion.print("TEMP");
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-  }
-  else if (strcmp(newValue, "0") == 0) {
-    nextion.print("t14.txt=\"");
-    nextion.print("      ");
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-  }
-}
-DcsBios::StringBuffer<1> ifeiTempTextureBuffer(0x74be, onIfeiTempTextureChange);
-
-///////////// ZULU Texture ///////////////////////
-void onIfeiZTextureChange(char* newValue) {
-  if (strcmp(newValue, "1") == 0) {
-    nextion.print("t32.txt=\"");
-    nextion.print("Z");
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-  }
-  else if (strcmp(newValue, "0") == 0) {
-    nextion.print("t32.txt=\"");
-    nextion.print(" ");
-    nextion.print("\"");
-    nextion.write("\xFF\xFF\xFF");
-  }
-}
-DcsBios::StringBuffer<1> ifeiZTextureBuffer(0x74dc, onIfeiZTextureChange);
+// F18 IFEI Arduino to Nextion Ver.12G - Ben Melrose (FP Flight Panels)
+//SoftwareSerial HMISerial (0, 1);
 
 
+//SoftwareSerial nextion(18, 19); // SETS SERIAL TO PINS  14/15 RX/TX1
 
-void onIfeiRpointerTextureChange(char* newValue) {
-if (strcmp(newValue, "1") == 0){
-  NOZOFF = HIGH;
-  nextion.print("p0.pic=0");
-  nextion.write("\xFF\xFF\xFF");
-  nextion.print("p1.pic=11");
-  nextion.write("\xFF\xFF\xFF");
-  }
-else {
-  NOZOFF = LOW; 
-  nextion.print("p0.pic=22");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("p1.pic=22");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t0.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t1.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t2.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t3.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t4.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t5.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t6.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF"); 
-
-  nextion.print("t7.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t7.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t10.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t11.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t30.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-
-  nextion.print("t31.txt=\"");
-  nextion.print("");
-  nextion.print("\"");
-  nextion.write("\xFF\xFF\xFF");
-  
-}
-
-}
-DcsBios::StringBuffer<1> ifeiRpointerTextureBuffer(0x74da, onIfeiRpointerTextureChange);
-
-
-
-/////////////////////XXXXXXXXXXXXXXXXXXXXXXXXXXXX END OF DCS BIOS WORKING XXXXXXXXXXXXXXXXXXXXXXXXXXXX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 void setup() {
-  //    Serial.begin(57600);
-  //  onIfeiFuelUpChange(fuelLevel);
-  // nextion.begin(19200);
-  //nextion.begin(115200);
-  nextion.begin(256000);
 
-  DcsBios::setup();
+  Serial.begin(9600);
+
+
 }
+
 void loop() {
 
-  ////////########      END       #######/////////
 
-  DcsBios::loop();
-  ////////########  SCREEN DIM    #######/////////
-  delay (0);
-  {
-    int brightness = analogRead(A4);
-    int bright = map(brightness, 10, 1100, 2, 100);
-    String dim = "dim=" + String(bright);
-    brightness = bright;
-    nextion.print(dim.c_str());
-    nextion.write("\xFF\xFF\xFF");
-  }
 }
