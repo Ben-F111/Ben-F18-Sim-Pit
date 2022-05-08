@@ -17,7 +17,7 @@
  Change //#define dbSerial Serial ("//" add to the begining, remark this line out)
  
  Current #define nexSerial Serial //
- Change #define nexSerial1 Serial // (Add "1" to nexSerial)
+ Change #define nexSerial Serial1 // (Add "1" to Serial)
  
  This file currently works with Version of the Nextion file
  
