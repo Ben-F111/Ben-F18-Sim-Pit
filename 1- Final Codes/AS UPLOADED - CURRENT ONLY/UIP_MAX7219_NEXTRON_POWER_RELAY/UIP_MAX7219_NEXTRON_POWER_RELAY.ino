@@ -2,15 +2,13 @@
 
 
 ////////////////////---||||||||||********||||||||||---\\\\\\\\\\\\\\\\\\\\
-  //||               FUNCTION = HORNET LED OUTPUT MAX 7219              ||\\
-  //||              LOCATION IN THE PIT = LIP RIGHTHAND SIDE             ||\\
-  //||            ARDUINO PROCESSOR TYPE = Arduino Mega 2560            ||\\
-  //||      ARDUINO CHIP SERIAL NUMBER = SN - 9593132393135140E002      ||\\
-  //||      ETHERNET SHEILD MAC ADDRESS = MAC - A8:61:0A:AE:83:18       ||\\
-  //||                    CONNECTED COM PORT = COM 8                    ||\\
-  //||            ****DO CHECK S/N BEFORE UPLOAD NEW DATA****           ||\\
-  ////////////////////---||||||||||********||||||||||---\\\\\\\\\\\\\\\\\\\\
-
+//||               FUNCTION = HORNET LED OUTPUT MAX 7219              ||\\
+//||              LOCATION IN THE PIT = LIP RIGHTHAND SIDE             ||\\
+//||            ARDUINO PROCESSOR TYPE = Arduino Mega 2560            ||\\
+//||      ARDUINO CHIP SERIAL NUMBER =      ||\\
+//||                    CONNECTED COM PORT = COM 13                    ||\\
+//||            ****DO CHECK S/N BEFORE UPLOAD NEW DATA****           ||\\
+////////////////////---||||||||||********||||||||||---\\\\\\\\\\\\\\\\\\\\
 
 // Tell DCS-BIOS to use a serial connection and use interrupt-driven
 // communication. The main program will be interrupted to prioritize
@@ -18,6 +16,13 @@
 //
 // This should work on any Arduino that has an ATMega328 controller
 // (Uno, Pro Mini, many others).
+
+
+// TODOS
+// Grab position of Position pot - set global var and use as multiplier when position lights are on
+// Grab position of Strobe light switch and use as a multiplier when strobes are on
+// Day-Nite-NVG
+// Position Day - all caution/warning lights 100%
 
 
 #define Ethernet_In_Use 1
@@ -491,6 +496,24 @@ char *ParameterValuePtr;
 
 #define AOA_BELOW_COL 1
 #define AOA_BELOW_ROW 0
+
+// #################### EXTERIOR LIGHTS #################
+
+// Pinouts for Version 2 PCBs. Selected pins did not support dimming
+//#define STROBE_LIGHTS 30
+//#define NAVIGATION_LIGHTS 34
+//#define FORMATION_LIGHTS 31
+//#define BACK_LIGHTS 33
+//#define FLOOD_LIGHTS 32
+
+// Pinouts for Version 4 PCB
+#define MAP_LIGHTS 6
+#define NVG_LIGHTS 6
+#define FLOOD_LIGHTS 7
+#define FORMATION_LIGHTS 8
+#define STROBE_LIGHTS 44
+#define NAVIGATION_LIGHTS 45
+#define BACK_LIGHTS 46
 
 // ######################## SETUP ########################
 #define STATUS_LED_PORT 6
@@ -975,21 +998,11 @@ DcsBios::IntegerBuffer rwrLimitLtBuffer(0x7498, 0x2000, 13, onRwrLimitLtChange);
 
 void onRwrLowerLtChange(unsigned int newValue) {
   lc.setLed(RWR_DIM, RWR_ON_COL_A, RWR_ON_ROW_A, newValue);
- // lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 1);
+  lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, newValue);
   //INVESTIGATE TO ADD TO BACKLIGHTING
 }
 DcsBios::IntegerBuffer rwrLowerLtBuffer(0x7498, 0x1000, 12, onRwrLowerLtChange);
 
-/*
-void onBatterySwChange(unsigned int newValue) {
-if (newValue = 0){
-  lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 0);
-} else {
-  lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 1);
-}
-}
-DcsBios::IntegerBuffer batterySwBuffer(0x74c4, 0x1800, 11, onBatterySwChange);
-*/
 
 void onRwrFailLtChange(unsigned int newValue) {
   lc.setLed(RWR_DIM, RWR_FAIL_RED_COL_A, RWR_FAIL_RED_ROW_A, newValue);
@@ -1187,23 +1200,20 @@ void SetBrightness(int Brightness) {
 
 // ************************************ End Max7219
 
-// ************************************ Begin Nextron Block
 
+// ************************************ Begin Relay Block
 
-#include <Arduino.h>
-/*
-
-void onConsoleIntLtChange(unsigned int newValue) {
+void onChartIntLtChange(unsigned int newValue) {
   if (newValue != 0) {
     digitalWrite(BACKLIGHTING_RELAY_PORT, true);
   } else {
     digitalWrite(BACKLIGHTING_RELAY_PORT, false);
-
   }
 }
-DcsBios::IntegerBuffer consoleIntLtBuffer(0x7558, 0xffff, 0, onConsoleIntLtChange);
+DcsBios::IntegerBuffer chartIntLtBuffer(0x755e, 0xffff, 0, onChartIntLtChange);
 
-*/
+
+
 void onLGenSwChange(unsigned int newValue) {
   if (newValue != 0 ) {
     LEFT_GEN_SWITCH_STATE = true;
@@ -1233,13 +1243,12 @@ void onBatterySwChange(unsigned int newValue) {
   }
   CheckRightScreenPowerState();
 
-if (newValue == 1){
-  lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 0);
-} else {
-  lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 1);
-}
 
-  
+  if (newValue == 1) {
+    lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 0);
+  } else {
+    lc.setLed(RWR_DIM, RWR_ALR_67_COL_A, RWR_ALR_67_ROW_A, 1);
+  }
 }
 DcsBios::IntegerBuffer batterySwBuffer(0x74c4, 0x1800, 11, onBatterySwChange);
 
@@ -1264,16 +1273,88 @@ void CheckRightScreenPowerState() {
   }
 }
 
-void onConsoleIntLtChange(unsigned int newValue) {
-  if (newValue <= 7000) {
-    analogWrite(BACK_LIGHTS, 0);
+// ************************************ End Relay Block
+
+
+
+// ************************************ Begin Exterior and Interior Lights Block
+
+// FORMATION LIGHTS
+void onExtFormationLightsChange(unsigned int newValue) {
+  analogWrite(FORMATION_LIGHTS, map(newValue, 0, 65535, 0, 255));
+}
+DcsBios::IntegerBuffer extFormationLightsBuffer(0x7576, 0xffff, 0, onExtFormationLightsChange);
+
+// POSITION/NAVIGATION LIGHTS
+void onPositionDimmerChange(unsigned int newValue) {
+  POSITION_BRIGHT_POT_POS = newValue;
+  if (POSITION_LIGHTS_STATUS == true)
+    analogWrite(NAVIGATION_LIGHTS, map(POSITION_BRIGHT_POT_POS, 0, 65535, 0, 255));
+}
+DcsBios::IntegerBuffer positionDimmerBuffer(0x7524, 0xffff, 0, onPositionDimmerChange);
+
+void onExtPositionLightLeftChange(unsigned int newValue) {
+  if (newValue != 0) {
+    analogWrite(NAVIGATION_LIGHTS, map(POSITION_BRIGHT_POT_POS, 0, 65535, 0, 255));
+    POSITION_LIGHTS_STATUS = true;
   } else {
-    analogWrite(BACK_LIGHTS, map(newValue, 7000, 65535, 0, 255));
+    digitalWrite(NAVIGATION_LIGHTS, LOW);
   }
 }
-DcsBios::IntegerBuffer consoleIntLtBuffer(0x7558, 0xffff, 0, onConsoleIntLtChange);
+DcsBios::IntegerBuffer extPositionLightLeftBuffer(0x74d6, 0x0400, 10, onExtPositionLightLeftChange);
+
+// STROBE LIGHTS
+
+// Strobe Switch Positions
+// Bright 2
+// Off    1
+// Dim    0
+//POSITION_BRIGHT_POT_POS
+
+void onExtStrobeLightsChange(unsigned int newValue) {
+  if (newValue != 0) {
+    if (STROBE_BRIGHT_SWITCH_POS == STROBE_BRIGHT)
+      analogWrite(STROBE_LIGHTS, STROBE_BRIGHT_LEVEL);
+    else
+      analogWrite(STROBE_LIGHTS, STROBE_DIM_LEVEL);
+  } else {
+    digitalWrite(STROBE_LIGHTS, LOW);
+  }
+}
+DcsBios::IntegerBuffer extStrobeLightsBuffer(0x74d6, 0x2000, 13, onExtStrobeLightsChange);
 
 
+void onStrobeSwChange(unsigned int newValue) {
+  STROBE_BRIGHT_SWITCH_POS = newValue;
+}
+DcsBios::IntegerBuffer strobeSwBuffer(0x74b0, 0x3000, 12, onStrobeSwChange);
+
+void onFloodIntLtChange(unsigned int newValue) {
+  analogWrite(FLOOD_LIGHTS, map(newValue, 0, 65535, 0, 255));
+}
+DcsBios::IntegerBuffer floodIntLtBuffer(0x755a, 0xffff, 0, onFloodIntLtChange);
+
+void onInstrIntLtChange(unsigned int newValue) {
+    analogWrite(BACK_LIGHTS, map(newValue, 7000, 65535, 10, 255));
+
+}
+DcsBios::IntegerBuffer instrIntLtBuffer(0x7560, 0xffff, 0, onInstrIntLtChange);
+
+
+void onNvgFloodIntLtChange(unsigned int newValue) {
+  if (newValue <= 7000) {
+    analogWrite(NVG_LIGHTS, 0);
+  } else {
+    analogWrite(NVG_LIGHTS, map(newValue, 7000, 65535, 0, 255));
+  }
+}
+DcsBios::IntegerBuffer nvgFloodIntLtBuffer(0x755c, 0xffff, 0, onNvgFloodIntLtChange);
+
+
+
+// ************************************ End Exterior and Interior Lights Block
+
+//
 
 void ProcessReceivedString()
 {
@@ -1326,6 +1407,19 @@ void setup() {
   digitalWrite(RELAY_PORT_3, true);
   digitalWrite(RELAY_PORT_4, true);
 
+  // Initialise Exterior Lights
+  pinMode(STROBE_LIGHTS, OUTPUT);
+  pinMode(NAVIGATION_LIGHTS, OUTPUT);
+  pinMode(FORMATION_LIGHTS, OUTPUT);
+  pinMode(BACK_LIGHTS, OUTPUT);
+  pinMode(FLOOD_LIGHTS, OUTPUT);
+
+  digitalWrite(STROBE_LIGHTS, LOW);
+  digitalWrite(NAVIGATION_LIGHTS, LOW);
+  digitalWrite(FORMATION_LIGHTS, LOW);
+  digitalWrite(BACK_LIGHTS, LOW);
+  digitalWrite(FLOOD_LIGHTS, LOW);
+
 
   if (Ethernet_In_Use == 1) {
     delay(EthernetStartupDelay);
@@ -1355,26 +1449,56 @@ void setup() {
 
 
   // Turn Everything on for 5 Seconds
+  digitalWrite(STROBE_LIGHTS, HIGH);
+  digitalWrite(NAVIGATION_LIGHTS, HIGH);
+  digitalWrite(FORMATION_LIGHTS, HIGH);
+  digitalWrite(BACK_LIGHTS, HIGH);
+  digitalWrite(FLOOD_LIGHTS, HIGH);
+  digitalWrite(NVG_LIGHTS, HIGH);
   AllOn();
-  delay(5000);
+  delay(2000);
 
   // Turn Everything off for 2 Seconds
   AllOff();
-  delay(2000);
+  digitalWrite(STROBE_LIGHTS, LOW);
+  digitalWrite(NAVIGATION_LIGHTS, LOW);
+  digitalWrite(FORMATION_LIGHTS, LOW);
+  digitalWrite(BACK_LIGHTS, LOW);
+  digitalWrite(FLOOD_LIGHTS, LOW);
+  digitalWrite(NVG_LIGHTS, LOW);
+  delay(1000);
 
   // Turn Everything on
+  digitalWrite(STROBE_LIGHTS, HIGH);
+  digitalWrite(NAVIGATION_LIGHTS, HIGH);
+  digitalWrite(FORMATION_LIGHTS, HIGH);
+  digitalWrite(BACK_LIGHTS, HIGH);
+  digitalWrite(FLOOD_LIGHTS, HIGH);
+  digitalWrite(NVG_LIGHTS, HIGH);
   SetBrightness(15);
   AllOn();
 
 
   // Slowly Dim the Leds
   for (int Local_Brightness = 15; Local_Brightness >= 0; Local_Brightness--) {
+    analogWrite(FORMATION_LIGHTS, map(Local_Brightness, 0, 15, 0, 255));
+    analogWrite(NAVIGATION_LIGHTS, map(Local_Brightness, 0, 15, 0, 255));
+    analogWrite(NVG_LIGHTS, map(Local_Brightness, 0, 15, 0, 255));
+    analogWrite(FLOOD_LIGHTS, map(Local_Brightness, 0, 15, 0, 255));
+    analogWrite(BACK_LIGHTS, map(Local_Brightness, 0, 15, 0, 255));
+    analogWrite(STROBE_LIGHTS, map(Local_Brightness, 0, 15, 0, 255));
     SetBrightness(Local_Brightness);
-    delay(1000);
+
+    delay(300);
   }
 
   // Turn off All Leds and set to mid brightness
   AllOff();
+  digitalWrite(STROBE_LIGHTS, LOW);
+  digitalWrite(NAVIGATION_LIGHTS, LOW);
+  digitalWrite(FORMATION_LIGHTS, LOW);
+  digitalWrite(BACK_LIGHTS, LOW);
+  digitalWrite(FLOOD_LIGHTS, LOW);
   SetBrightness(8);
 
   DcsBios::setup();

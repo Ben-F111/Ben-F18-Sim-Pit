@@ -737,7 +737,7 @@ void SendDCSBIOSMessage(int ind, int state) {
       sendDcsBiosMessage("LEFT_DDI_CRS_SW", "1");
       break;
     case 168:
-      sendDcsBiosMessage("LEFT_DDI_CRS_SW", "10");
+      sendDcsBiosMessage("LEFT_DDI_CRS_SW", "1");
       break;
     case 169:
       // ######### PETE TO ADD LATCH #########
@@ -1330,7 +1330,7 @@ case 1:
 // HUD ANALOG INPUTS
 DcsBios::Potentiometer hudSymBrt("HUD_SYM_BRT", A0);
 // 20220227 Bug in FP DCS-BIOS stops indiexer updates if AoA indexer below 50% - sending over IP
-//DcsBios::Potentiometer hudAoaIndexer("HUD_AOA_INDEXER", A1);
+DcsBios::Potentiometer hudAoaIndexer("HUD_AOA_INDEXER", A1);
 DcsBios::Potentiometer hudBlackLvl("HUD_BLACK_LVL", A2);
 DcsBios::Potentiometer hudBalance("HUD_BALANCE", A3);
 
@@ -1368,8 +1368,8 @@ DcsBios::RotaryEncoder ufcComm2ChannelSelect("UFC_COMM2_CHANNEL_SELECT", "DEC", 
 //DcsBios::RotaryEncoder ufcComm1ChannelSelect("UFC_COMM1_CHANNEL_SELECT", "DEC", "INC", 19, 18);
 //DcsBios::RotaryEncoder ufcComm2ChannelSelect("UFC_COMM2_CHANNEL_SELECT", "DEC", "INC", 21, 20);
 //STANDBY INST
-DcsBios::RotaryEncoder saiSet("SAI_SET", " - 3200", " + 3200", 15, 14);
-DcsBios::RotaryEncoder stbyPressAlt("STBY_PRESS_ALT", " - 3200", " + 3200", 16, 17);
+DcsBios::RotaryEncoder saiSet("SAI_SET", "-3200", "+3200", 15, 14);  //15, 14
+DcsBios::RotaryEncoder stbyPressAlt("STBY_PRESS_ALT", "-3200", "+3200", 16, 17); //16, 17
 ////||||\\\\ Investigate issue on Bens Pit ////||||\\\\
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -124,9 +124,9 @@ bool PORT_OUTPUT_STATE = false;
 #define  COILRA3  41
 #define  COILRA4  43
 
-#define  COILCA1  34 // CA = CAB ALT
-#define  COILCA2  32
-#define  COILCA3  36
+#define  COILCA1  36 // CA = CAB ALT
+#define  COILCA2  34
+#define  COILCA3  32
 #define  COILCA4  38
 
 #define  COILBP1  39 // BP = BRAKE PRESSURE
