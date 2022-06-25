@@ -1,0 +1,3 @@
+ALL
+
+some STL's are at 100% over, in you slicer change the sacle to  10%, cheers Ben
