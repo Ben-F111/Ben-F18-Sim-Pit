@@ -17,10 +17,10 @@
 
 #include <Stepper.h>
 //
-const int BrakePress1 = 33;
-const int BrakePress2 = 35;
-const int BrakePress3 = 37;
-const int BrakePress4 = 39;
+const int BrakePress1 = 32;
+const int BrakePress2 = 36;
+const int BrakePress3 = 34;
+const int BrakePress4 = 38;
 
 
 //const int BrakePress1 = 41;
@@ -33,7 +33,7 @@ const int BrakePress4 = 39;
 //const int BrakePress3 = 36;
 //const int BrakePress4 = 38;
 
-const int stepsPerRevolution = 400;  // change this to fit the number of steps per revolution
+const int stepsPerRevolution = 720;  // change this to fit the number of steps per revolution
 // for your motor
 
 // initialize the stepper library on pins 8 through 11:
@@ -41,7 +41,7 @@ Stepper myStepper(stepsPerRevolution, BrakePress1, BrakePress2, BrakePress3, Bra
 
 void setup() {
   // set the speed at 60 rpm:
-  myStepper.setSpeed(60);
+  myStepper.setSpeed(30);
   // initialize the serial port:
   Serial.begin(9600);
 }
@@ -49,11 +49,11 @@ void setup() {
 void loop() {
   // step one revolution  in one direction:
   Serial.println("clockwise");
-  myStepper.step(stepsPerRevolution);
+  myStepper.step(1440);
   delay(500);
 
   // step one revolution in the other direction:
   Serial.println("counterclockwise");
-  myStepper.step(-stepsPerRevolution);
+  myStepper.step(-1440);
   delay(500);
 }

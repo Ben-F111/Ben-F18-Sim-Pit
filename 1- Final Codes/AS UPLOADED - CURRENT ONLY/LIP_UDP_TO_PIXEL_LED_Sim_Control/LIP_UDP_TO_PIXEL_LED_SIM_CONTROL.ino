@@ -62,7 +62,7 @@ const int  RIGHT_CONSOLE_LED_COUNT = RIGHT_CONSOLE_LED_COUNT_WO_SC + SIM_CONTROL
 
 
 // Connections using Lukes Power Distribution
-#define UIP_PIN                 40
+#define UIP_PIN                 8
 #define LIP_PIN                 46
 // Not used as locking collides 44
 // Not used as locking collides 46

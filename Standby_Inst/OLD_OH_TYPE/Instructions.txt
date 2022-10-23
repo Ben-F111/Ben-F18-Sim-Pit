@@ -1,0 +1,18 @@
+Please print these parts "Face Down" on the printer bed
+
+I Used 0.2mm layer height, PTEG on the Prusa MK3s 20% infill
+
+see attached 
+
+PRINT-BED.JPG
+
+Fill any small lines with Model Putty and Sand with 400 then 800 Paper
+
+Glue with Gel Superglue
+
+paint, Flat Black
+
+For complete parts list, instructions and any other parts, see Open Hornets Github
+
+***********************
+Files with OH_XXX are original OH files, no change to the design.
