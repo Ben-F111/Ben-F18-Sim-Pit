@@ -4,7 +4,7 @@
 //||            ARDUINO PROCESSOR TYPE = Arduino Mega 2560            ||\\
 //||      ARDUINO CHIP SERIAL NUMBER = SN - 759323138383511130C1      ||\\
 //||      ETHERNET SHEILD MAC ADDRESS = MAC - A8:61:0A:AE:83:08       ||\\
-//||                    CONNECTED COM PORT = COM 4                    ||\\
+//||                    CONNECTED COM PORT = COM 12                    ||\\
 //||               ****ADD ASSIGNED COM PORT NUMBER****               ||\\
 //||            ****DO CHECK S/N BEFORE UPLOAD NEW DATA****           ||\\
 ////////////////////---||||||||||********||||||||||---\\\\\\\\\\\\\\\\\\\\

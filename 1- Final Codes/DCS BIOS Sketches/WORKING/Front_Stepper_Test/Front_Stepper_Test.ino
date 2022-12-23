@@ -17,10 +17,10 @@
 
 #include <Stepper.h>
 //
-const int BrakePress1 = 32;
-const int BrakePress2 = 36;
-const int BrakePress3 = 34;
-const int BrakePress4 = 38;
+const int BrakePress1 = 22;
+const int BrakePress2 = 28;
+const int BrakePress3 = 24;
+const int BrakePress4 = 26;
 
 
 //const int BrakePress1 = 41;
